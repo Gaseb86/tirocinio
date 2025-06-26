@@ -1,0 +1,147 @@
+@startuml Class Diagram
+
+skinparam classAttributeIconSize 0
+
+class User {
+  +user_id: string
+  +telegram_id: string
+  +thread_id: string
+  +assistant_id: string
+  +username: string
+  +last_time_used: Date
+  +create_time: Date
+  +update_time: Date
+  
+  +findByUserId(userId: string): User
+  +findByTelegramId(telegramId: string): User
+  +updateThreadByUserId(userId: string, threadId: string): void
+  +updateAssistantByUserId(userId: string, assistantId: string): void
+  +updateLastTimeUsedByUserId(userId: string): void
+  +updateUsernameByUserId(userId: string, username: string): void
+  +create(userId: string, threadId: string, assistantId: string, telegramId: string, username: string): User
+}
+
+class Message {
+  +id: number
+  +user_id: string
+  +assistant_id: string
+  +thread_id: string
+  +message: string
+  +timestamp: number
+  +type: MessageType
+  +ticketOpen: boolean
+  +ticket_id: number
+  +datetime: Date
+  +score_id: number
+  +create_time: Date
+  +update_time: Date
+  
+  +getMessagesByUserId(userId: string): Message[]
+  +create(userId: string, assistantId: string, threadId: string, message: string, timestamp: number, type: MessageType, ticketOpen?: boolean, ticketId?: number): Message
+  +updateTicketStatusByMsgId(msgId: number, status: boolean): void
+  +getAllMessages(): Message[]
+  +setScoreId(scoreId: number): void
+}
+
+class Assistant {
+  +id: number
+  +assistant_id: string
+  +name: string
+  +img: string
+  +tools: Tool[]
+  +model: string
+  +create_time: Date
+  +update_time: Date
+  
+  +findById(assistantId: string): Assistant
+  +create(assistantId: string, name: string, img: string): Assistant
+}
+
+class Score {
+  +id: number
+  +question: string
+  +answer: string
+  +score: number
+  +file_search_result: string
+  +relevance: number
+  +create_time: Date
+  +update_time: Date
+  
+  +create(question: string, answer: string, score: number): Score
+  +getAverageScore(): number
+  +getRelevanceById(id: number): number
+}
+
+class Thread {
+  +id: string
+  +user_id: string
+  +last_message_id: string
+  +expired: boolean
+  +create_time: Date
+  +update_time: Date
+  
+  +create(): Thread
+  +addMessage(role: string, content: string): Message
+  +getMessages(): Message[]
+  +reset(): void
+}
+
+class Run {
+  +id: string
+  +thread_id: string
+  +assistant_id: string
+  +status: string
+  +started_at: Date
+  +completed_at: Date
+  +tool_calls: ToolCall[]
+  +required_action: RequiredAction
+  +last_error: Error
+  
+  +create(threadId: string, assistantId: string, tools: Tool[]): Run
+  +retrieve(threadId: string, runId: string): Run
+  +submitToolOutputs(threadId: string, runId: string, outputs: ToolOutput[]): void
+  +waitForResponse(userId: string, threadId: string, runId: string): Promise<Run>
+  +handleToolCalls(openai: OpenAI, run: Run, threadId: string, runId: string): void
+  +checkFileSearchRelevance(threadId: string, runId: string): Promise<Score | null>
+}
+
+class ToolCall {
+  +id: string
+  +function: Function
+  +type: string
+  
+  +executeTool(functionName: string, args: any, userId: string): Promise<any>
+}
+
+enum MessageType {
+  User
+  GPT
+  Ticket
+  Admin
+}
+
+enum RunStatus {
+  completed
+  failed
+  in_progress
+  requires_action
+  expired
+  cancelled
+}
+
+User "1" --> "*" Message : write
+User "1" --> "1" Thread : owns
+Thread "1" --> "*" Message : contains
+Thread "1" --> "*" Run : executes
+Assistant "1" --> "*" Run : processes
+Run "*" --> "1" Thread : runs on
+Run "1" --> "*" ToolCall : may require
+Run "1" --> "0..1" Score : generates when using file search
+Message "*" --> "1" MessageType : is of
+Message "*" --> "0..1" Message : relates to (ticket)
+Message "1" --> "0..1" Score : has relevance score
+User "*" --> "1" Assistant : uses
+Assistant "1" --> "*" Message : generates
+Run "1" --> "1" RunStatus : has
+
+@enduml

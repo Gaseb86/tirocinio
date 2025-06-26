@@ -1,0 +1,109 @@
+@startuml Predictive Monitoring
+
+!theme plain
+skinparam backgroundColor white
+
+title "Sistema di Monitoraggio Predittivo Proposto"
+
+actor "Cliente" as Client
+actor "Amministratore" as Admin
+actor "Sistema AI" as AI #LightBlue
+
+box "Monitoraggio & Detection" #LightGrey
+    participant "Agenti di Monitoring" as Agents
+    participant "Analisi Pattern" as Pattern
+    participant "Predictor Engine" as Predictor
+    database "Pattern & History DB" as HistoryDB
+end box
+
+box "Gestione Proattiva" #LightGoldenRodYellow
+    participant "Alert Manager" as Alerter
+    participant "Triage Engine" as Triage
+    participant "Knowledge Base" as KB
+end box
+
+box "Interazione & Risoluzione" #LightCyan
+    participant "Notifica Utente" as Notifier
+    participant "Assistente AI" as Assistant
+    participant "Sistema Ticket" as Ticket
+end box
+
+== Monitoraggio Continuo ==
+
+Agents -> HistoryDB: Raccolta metriche in tempo reale
+activate Agents
+note right of Agents
+  Monitoring di:
+  - Performance server
+  - Spazio disco
+  - Connettività servizi
+  - Metriche applicative
+end note
+deactivate Agents
+
+== Analisi Predittiva ==
+
+loop Ogni 5 minuti
+    Pattern -> HistoryDB: Recupero dati storici
+    activate Pattern
+    Pattern -> Pattern: Analisi pattern anomali
+    Pattern -> Predictor: Invio pattern rilevati
+    deactivate Pattern
+    
+    activate Predictor
+    Predictor -> HistoryDB: Confronto con modelli storici
+    Predictor -> Predictor: Calcolo probabilità problemi
+    
+    alt Problema imminente rilevato
+        Predictor -> Alerter: Segnalazione predittiva
+        deactivate Predictor
+        
+        activate Alerter
+        Alerter -> Triage: Valutazione urgenza e impatto
+        deactivate Alerter
+        
+        activate Triage
+        Triage -> KB: Ricerca soluzioni automatiche
+        Triage -> Triage: Classificazione problema
+        
+        alt Risolvibile automaticamente
+            Triage -> AI: Richiesta intervento automatico
+            activate AI
+            AI -> Agents: Esecuzione azioni correttive
+            AI -> Triage: Conferma risoluzione
+            deactivate AI
+            
+        else Richiede notifica preventiva
+            Triage -> Notifier: Preparazione comunicazione
+            activate Notifier
+            Notifier -> Client: Notifica preventiva problema
+            Notifier -> Assistant: Informazioni contestuali
+            deactivate Notifier
+            
+            Client -> Assistant: Richiesta dettagli
+            activate Assistant
+            Assistant -> Client: Spiegazione e opzioni
+            Assistant -> AI: Richiesta azioni correttive (se autorizzato)
+            deactivate Assistant
+            
+        else Richiede intervento umano
+            Triage -> Ticket: Creazione ticket preventivo
+            activate Ticket
+            Ticket -> Admin: Notifica intervento necessario
+            deactivate Ticket
+            activate Admin
+            Admin -> Agents: Intervento tecnico
+            deactivate Admin
+        end
+        
+        Triage -> HistoryDB: Registrazione caso e risoluzione
+        deactivate Triage
+    end
+end
+
+== Apprendimento Continuo ==
+
+HistoryDB -> Predictor: Aggiornamento modelli predittivi
+KB -> Predictor: Nuove correlazioni problema-soluzione
+
+@enduml

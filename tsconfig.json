@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "lib": [
+        "es6"
+      ],
+      "baseUrl": ".",
+      "target": "ES6",
+      "module": "CommonJS",
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "src",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "sourceMap": true,
+      "strict": true
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  }

@@ -1,0 +1,61 @@
+// TECNICA-MENU_PROFILO.txt
+[MENU_PROFILO ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per:
+- MENU_PROFILO
+
+Il menù profilo risiede in alto a destra sul portale Konsolex è racchiude tutte le sezioni inerenti alla gestione e funzionalità dell'utente
+
+1. SEZIONE PROFILO UTENTE
+Modifica dei dati dell'utente
+
+2. SEZIONE SICUREZZA
+Da questo menù è possibile gestire:
+    A. cambio password
+    B. autenticazione a due fattori
+    C. login con account esterni (google, github, linkedin)
+    D. impostare pagamenti automatici
+
+3. SEZIONE IMPOSTAZIONI
+Da questo menù è possibile gestire:
+    A. notifiche del portale Konsolex
+        da questa sezione si gestiscono:
+        1. canali di ricezione delle notifiche
+        2. email su cui ricevere le notifiche
+        3. giorni precedenti alla scadenza di ricezione notifiche.
+    B. host
+        da questa sezione si gesticono gli host da utilizzare per configurare i server web e mail in fase di registrazione e migrazione dei domini
+    C. teams
+        da questa sezione personalizzi il tuo pannello Konsolex con il tuo brand e creai gli utenti per l'accesso al tuo pannello Konsolex personalizzato
+    D. permessi teams
+        da questa sezione configuri i permessi degli account teams
+3a. PROBLEMI NOTIFICHE DEL PORTALE KONSOLEX
+Caso 1: Si ricevono troppe email di notifica scadenza dei servizi
+Soluzione 1: dalla gestione delle notifiche del portale Konsolex è possibile, clccando sul tasto modifca, impostare, per ogni tipologia di servizio, il numero di giorni, precedenti alla scadenza, in cui ricevere, giornalmente, la mail di avviso di scadenza servizio
+3b. PROBLEMI TEAMS
+Caso 1: A seguito della creazione dell'account teams questo non accede al portale
+Soluzione 1: Per l'accesso al portale personalizzato bisogna per prima cosa creare l'accesso personale:
+    1. accedi a 'modifiche preferenze'
+    2. inserisci il colore principale e il tuo logo
+    3. utilizza l'url indicato o personalizzalo con il tuo brand e fai accedere da qui i tuoi clienti
+Caso 2: Non è possibile aggiungere o creare un utente teams
+Soluzione 2: Per aggiungere un utente teams bisogna prima creare l'utente nella sezione CLIENTI. Una volta creato sarà possibile aggiungerlo come utente teams
+
+4. SEZIONE CLIENTI
+Da questa sezione si possono creare i clienti da utilizzare per gestire i proprietari dei domini e gli account teams
+
+5. SEZIONE RICARICA
+da questa sezione si effettua la ricarica del credito. Pagamenti accettati: carta di credito, bonifico bancario, ricarica autoamtica carta di credito. 
+E' possibile visualizzare il cashback spettante secondo l'importo e la tipologia di pagamento scelto
+5a. PROBLEMI RICARICA BONIFICO
+Caso 1: A seguito del bonifico il credito non è stato ancora aggiornato
+Soluzione 1: Il bonifico viene registrato in 48/72 ore. Per urgenze è suggerito fare una ricarica con carta di credito in quanto l'accredito sul saldo è immediato
+
+6. SEZIONE I MIEI SERVIZI
+da questa sezione si gestiscono i rinnovi di tutti i servizi attivi. E' possibile visualizzare i costi, la data di scadenza e gestire l'autorinnovo.
+In caso di mancato rinnovo o autorinnovo è da questa sezione che si deve effettuare il rinnovo manuale. Per rinnovo dopo la data di scadenza potrebbe essere richiesto una somma maggiorata.
+
+7. SEZIONE MOVIMENTI
+da questa sezione si vedono tutte le movimentazioni (pagamenti e ricariche) del credito utente
+
+8. SEZIONE ORDINI
+da questa sezione si veodno tutti gli ordini di ricarica credito effettuate

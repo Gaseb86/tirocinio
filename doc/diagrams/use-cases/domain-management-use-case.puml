@@ -1,0 +1,39 @@
+@startuml Domain Management Use Case
+left to right direction
+skinparam actorStyle awesome
+
+actor "Cliente" as Customer
+actor "Sistema OpenAI" as OpenAI
+actor "API Konsolex" as KonsolexAPI
+
+rectangle "Sistema ChatBot AI" {
+  usecase "Richiedere verifica dominio" as UC1
+  usecase "Analizzare richiesta" as UC2
+  usecase "Estrarre nome dominio" as UC3
+  usecase "Verificare disponibilità" as UC4
+  usecase "Comunicare risultato" as UC5
+  usecase "Suggerire alternative" as UC6
+}
+
+Customer --> UC1
+UC1 --> UC2
+UC2 --> OpenAI : richiede analisi
+OpenAI --> UC3 : estrae dominio
+UC3 --> UC4
+UC4 --> KonsolexAPI : invoca checkDomainAvailability
+KonsolexAPI --> UC5 : ritorna risultato
+UC5 --> Customer : comunica disponibilità
+
+UC5 ..> UC6 : se non disponibile
+UC6 --> Customer : suggerisce domini alternativi
+
+note right of UC4
+  Implementato in endpoint.ts tramite
+  la funzione checkDomainAvailability
+end note
+
+note bottom of UC6
+  Utilizza l'endpoint DOMAIN_CHECK
+  definito in constants.ts
+end note
+@enduml

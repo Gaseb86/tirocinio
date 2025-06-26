@@ -1,0 +1,147 @@
+@startuml "KX-AI System Architecture"
+
+' Core System
+package "Core System" {
+  class Application {
+    + openai: OpenAI
+    + bot: Telegraf
+    + launchApp(): void
+    - initializeTicketCache(): void
+    - initializeOpenAIFile(): void
+    - setupBot(): void
+    - startWebServer(): void
+  }
+
+  class WebServer {
+    + express: Express
+    + port: number
+    + start(): void
+    + setupRoutes(): void
+    + handleMessages(): void
+  }
+}
+
+' OpenAI Integration
+package "OpenAI Layer" {
+  class OpenAIHandler {
+    + createReply(): Promise<string>
+    + updateUserThreadAndAssistant(): Promise<User>
+    + handleToolCalls(): Promise<void>
+    + executeTool(): Promise<any>
+  }
+
+  class ThreadManager {
+    + createThread(): Promise<Thread>
+    + getMessages(): Promise<Message[]>
+    + addMessage(): Promise<void>
+    + waitForResponse(): Promise<any>
+  }
+}
+
+' Telegram Integration
+package "Telegram Layer" {
+  class TelegramBot {
+    + handleMessage(): void
+    + handleCallback(): void
+    + sendMessage(): void
+    + setupCommands(): void
+  }
+
+  class MessageHandler {
+    + processMessage(): void
+    + formatResponse(): string
+    + sendReply(): void
+  }
+}
+
+' Data Models
+package "Entities" {
+  class User {
+    + user_id: string
+    + telegram_id: string
+    + thread_id: string
+    + assistant_id: string
+    + last_time_used: Date
+    + username: string
+  }
+
+  class Message {
+    + id: number
+    + user_id: string
+    + assistant_id: string
+    + thread_id: string
+    + message: string
+    + timestamp: number
+    + type: MessageType
+    + ticketOpen: boolean
+    + ticket_id: number
+  }
+
+  enum MessageType {
+    User
+    GPT
+    Ticket
+  }
+}
+
+' Domain Operations
+package "Domain Logic" {
+  class ServerOperations {
+    + restartServer(): Promise<boolean>
+    + powerOnServer(): Promise<boolean>
+    + restartServices(): Promise<boolean>
+    + modifyResources(): Promise<boolean>
+  }
+
+  class DomainOperations {
+    + checkAvailability(): Promise<any>
+    + getAuthInfo(): Promise<any>
+    + modifyDNS(): Promise<boolean>
+    + updateAuthinfo(): Promise<boolean>
+  }
+
+  class TicketSystem {
+    + createTicket(): Promise<void>
+    + updateTicket(): Promise<void>
+    + closeTicket(): Promise<void>
+    + getTickets(): Promise<Ticket[]>
+  }
+}
+
+' Repositories
+package "Data Access" {
+  class UserRepository {
+    + create(): Promise<User>
+    + findByUserId(): Promise<User>
+    + updateThread(): Promise<void>
+    + updateLastTimeUsed(): Promise<void>
+  }
+
+  class MessageRepository {
+    + create(): Promise<Message>
+    + findByUserId(): Promise<Message[]>
+    + updateTicketStatus(): Promise<void>
+  }
+}
+
+' Relationships
+Application --> WebServer
+Application --> TelegramBot
+Application --> OpenAIHandler
+
+OpenAIHandler --> ThreadManager
+OpenAIHandler --> UserRepository
+OpenAIHandler --> MessageRepository
+
+TelegramBot --> MessageHandler
+MessageHandler --> OpenAIHandler
+
+ServerOperations --> User
+DomainOperations --> User
+TicketSystem --> Message
+
+Message --> MessageType
+UserRepository --> User
+MessageRepository --> Message
+
+@enduml

@@ -1,0 +1,85 @@
+@startuml Message-Flow
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+
+start
+
+:Utente invia messaggio;
+
+:Validazione input|
+note right
+- Verifica userId
+- Verifica telegram_id
+- Verifica testo messaggio
+end note
+
+if (Input valido?) then (no)
+    :Ritorna errore 400;
+    stop
+else (si)
+    :getUserOrCreate()|
+    note right
+    Recupera utente esistente o 
+    ne crea uno nuovo con:
+    - Thread OpenAI
+    - AssistantId
+    - Username da Konsolex
+    end note
+endif
+
+if (Ticket aperto?) then (si)
+    :Recupera ultimo ticket;
+    :createMessage()|
+    note right
+    Crea messaggio tipo User
+    con flag ticketOpen=true
+    end note
+    
+    :sendMessageToAdmin()|
+    note right
+    - Invia notifica Telegram admin
+    - Crea/aggiorna ticket
+    - Aggiunge pulsanti di risposta
+    end note
+    
+    :resetClientReplyState();
+    
+    :Notifica Konsolex|
+    note right
+    Aggiorna stato messaggi
+    per admin (TelegramAdminId)
+    end note
+    
+else (no)
+    :createMessage()|
+    note right
+    Crea messaggio tipo User
+    con flag ticketOpen=false
+    end note
+    
+    :Notifica Konsolex|
+    note right
+    Aggiorna stato messaggi
+    per utente corrente
+    end note
+    
+    :storeMessageAndCreateReply()|
+    note right
+    - Invia richiesta OpenAI
+    - Processa risposta
+    - Salva risposta GPT nel DB
+    - Formatta risposta
+    end note
+endif
+
+:Prepara ApiResponse|
+note right
+success: true
+messageTo: "GPT" o "Admin"
+gptReply: risposta se presente
+end note
+
+:Invia risposta al client;
+
+stop
+@enduml

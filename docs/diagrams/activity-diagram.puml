@@ -1,0 +1,21 @@
+@startuml Activity Diagram
+start
+:Receive Message Request;
+
+if (Rate Limit OK?) then (yes)
+  :Validate Message;
+  if (Message Valid?) then (yes)
+    :Find/Create User;
+    :Save User Message;
+    :Get GPT Reply;
+    :Save GPT Message;
+    :Return Success;
+  else (no)
+    :Return Validation Error;
+  endif
+else (no)
+  :Return Rate Limit Error;
+endif
+
+stop
+@enduml

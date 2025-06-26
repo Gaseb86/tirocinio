@@ -1,0 +1,161 @@
+// TECNICA-WEBSERVER.txt
+[WEBSERVER ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per server:
+- WEBSERVER
+- WEBSERVER-APACHE
+- WEBSERVER-NGINX
+Se il tuo server non è di questi tipi, consulta il file appropriato.
+
+1.PROBLEMA SERVER WEBSERVER
+Caso 1: Server di tipo WEBSERVER non raggiungibile
+Soluzione 1: Se il server non risulta raggiungibile bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. riavvia il server
+		2. spegni il server e, dopo 2 minuti dallo spegnimento, riaccendilo
+	NB: Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server
+
+2. PROBLEMA SITO SU SERVER WEBSERVER
+Caso 1: Problema di visualizzazione di un singolo sito su Server di tipo WEBSERVER
+Soluzione 1: se un solo sito del server non è visibile, bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. Verificare la corretta propagazione dei record DNS. I record necessari per la visualizzazione di un sito sono due: record A dominio.tld e record A www. Per verificare la corretta propagazione si può utilizzare un servizio online come whatsmydns.net oppure effettuare un semplice ping da pc. 
+		2. Aumentare la quota disco e la quota traffico assegnata al sito e al database
+		3. Verificare gli errori nella cartella /log del sito
+Caso 2: Se si presenta un problema di visualizzazione di tutti i siti su Server di tipo WEBSERVER
+Soluzione 2: se tutti i siti presenti sul server hanno problemi di visualizzazione bisogna procedere con questi passaggi:
+		1. Riavvio del server
+Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server. 
+
+3.PROBLEMA DATABASE O MYSQL SU SERVER WEBSERVER
+Caso 1: Problema di connessione al database o mysql su server di tipo WEBSERVER su singolo database:
+Soluzione 1: Se si riscontrano problemi con il servizio Mysql o con il Database durante l'apertura della pagina del sito web (errore connessione al database) bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. Aumentare lo spazio disco assegnato al database
+		2. Riavviare il servzio Mysql dalla sezione Servizi del server
+		3. Verificare i dati inseriti nel file di configurazione del sito
+		4. Riavviare il server
+	NB: Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server.
+	####TIPS: una volta ripristinato il servizio si consiglia di lanciare un azione di riparazione tabelle
+Caso 2: Problema database e mysql su tutti i database su Server di tipo WEBSERVER:
+Soluzione 2: Se si riscontrano problemi con il servizio Mysql o con il Database durante l'apertura delle pagine web di tutti i siti presenti sul server di tipo WEBSERVER (errore connessione al database) bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. Verificare lo spazio disco del server
+		2. Riavviare il servizio Mysql dalla sezione Servizi del server 
+		3. Riavviare il server
+NB:Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server.
+Caso 3: Se si presenta un problema nella modifica di una tabella del db o si visualizza un errore di permessi su un database su server di tipo WEBSERVER
+Soluzione 3: Per risolvere il problema sulla impossibilità di modificare una tabella del db o un problema con i permessi:
+		1. Aumentare la quota di spazio assegnata al database del sito
+Caso 4: Se non si visualizza la pagina di accesso a Phpmyadmin su Server di tipo WEBSERVER
+Soluzione 4: Se si riscontrano problemi di apertura della pagina di login di Phpmyadmin bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+        1. Accettare la connessione non sicura
+        2. Navigare in anonimo
+        3. Modificare la porta nell'url (le porte da utilizzare sono 8080 o 8081)
+
+4.PROBLEMA CERTIFICATO SSL SU SERVER WEBSERVER
+Caso 1: Mancata generazione di un certifcato ssl Let's Encrypt su sito su server di tipo WEBSERVER
+Soluzione 1: Se il certificato ssl Let's Encrypt non viene generato su un sito su Server di tipo WEBSERVER bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. verificare la creazione dei record A nomedominio.tld e www
+		2. verificare la propagazione dei record A nomedominio.tld e www
+		3. verificare la creazione e la propagazione dei record A e WWW degli alias domini (se ci sono degli alias anche questi devono avere i dns configurati correttamente)
+		4. verificare che le direttive php siano impostate in modo corretto su tutti i siti presenti sul server. Si può verificare la corretta sintassi della direttiva attraverso un file phpinfo.php 
+		5. Se è tutto corretto e verificato allora il problema potrebbe essere il superamento dei tentativi giornalieri di richiesta; Se si prova ad attivare il certificato troppe volte in un arco di tempo limitato o nelle 24 ore il sistema Let's Encrypt blocca, per 24 ore, ogni nuova richiesta. Attendere 24 ore e riprovare
+NB: è sempre consigliato, nel caso di modifica dei record, di impostare il TTL a 300 almeno 24 ore prima della richiesta del certificato questo perchè alcuni server potrebbero aggiornare i record dopo 24 ore se il vecchio TTL era impostato a 86400. Se i record sono invece nuovi impostare il TTL a 300 (5 minuti) in fase di creazione dei record.
+####TIPS: la corretta generazione del certificato può essere verificata attraverso il servizio sslshopper.com/ssl-checker.html [è possibile cancellare la cache di sslshopper dal link presente nella pagina]
+####TIPS: Il file phpinfo.php, se richiesto dall'utente, va creato inserendo, in un txt, questo codice:
+<?php
+phpinfo( );
+?>
+caricandolo nella root principale /web
+
+5.PROBLEMA FTP SU SERVER WEBSERVER
+Caso 1: Problema di accesso FTP su un sito su server di tipo WEBSERVER
+Soluzione 1: Se si riscontrano problemi di accesso attraverso il software FTP utilizzato bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi step:
+		1. utilizza come host l'ip del server invece del nome server
+		2. resetta la psw dell'account FTP
+		3. Crea un nuovo utente FTP
+		4. Cambia rete o ip locale perchè potresti essere stato bannato
+		5. Riavvia il server
+Caso 2: Problema di accesso FTP su tutti i siti su server di tipo WEBSERVER
+Soluzione 2: Se si presenta un problema di accesso FTP su tutti i siti su server di tipo WEBSERVER
+		1. Riavviare il servizio FTP se presente
+		2. Riavviare il server
+
+6.PROBLEMA CRONJOB SU SERVER WEBSERVER
+Caso 1: In caso di problemi su un comando cronjob per il server di tipo WEBSERVER
+Soluzione 1: Se il comando cronjob non funziona o ci sono problemi bisogna fare un test per verificare se il servizio sia funzionante. Per fare questo test bisogna seguire tutti questi passaggi: creare un file `testcron.php` nella cartella `/web` con il seguente codice PHP completo:
+`<?php
+$myfile = fopen("AB_CRON_FILE.txt", "w") or die("Unable to open file!");
+$txt = "CRON FUNZIONA\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+?>`
+una volta creato il file e caricato nella cartella /web creare un cronjob con il comando: `https://nomedeltuodominio.tld/testcron.php`. Nel campo minuti inserisci `*/2` e nei restanti campi `*` per eseguirlo ogni 2 minuti. Dopo circa 2 minuti, verifica che nella cartella /web sia stato creato il file `A_CRON_FILE.txt`.
+Se il file `A_CRON_FILE.txt` è stato creato correttamente, il servizio cronjob sul tuo server funziona perfettamente.
+
+7. PROBLEMA SITO WEB SU SERVER WEBSERVER
+Caso 1: Problema di visualizzazione di un singolo sito su server di tipo WEBSERVER
+Soluzione 1: se un solo sito del server non è visibile, bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. Verificare la corretta propagazione dei record DNS. I record necessari per la visualizzazione di un sito sono due: record A dominio.tld e record A www. Per verificare la corretta propagazione si può utilizzare un servizio online come whatsmydns.net oppure effettuare un semplice ping da pc. 
+		2. Aumentare la quota disco e la quota traffico assegnata al sito e al database
+		3. Verificare gli errori nella cartella /log del sito
+ Caso 2: Se si presenta un problema di visualizzazione di tutti i siti presenti sul server di tipo WEBSERVER
+ Soluzione 2: Va fatto un riavvio del server.
+ Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server. 
+
+8.PROBLEMA AGENTE SU SERVER WEBSERVER
+L'agente è necessario per alcune funzionalità e operazioni da effettuare su Konsolex. 
+Caso 1: Durante l'aggiornamento l'agente torna alla vecchia versione. 
+Soluzione 1: Bisogna rilanciare l'aggiornamento e appena si visualizza l'agente aggiornato riavviarlo dal tasto riavvia agente.
+
+9. MODIFICA DIRETTIVE PHP SU SERVER WEBSERVER
+Caso 1: Aumentare o modificare il valore php per i siti su server tipo WEBSERVER
+Soluzione 1: Per modificare le direttive php segui questi passaggi:
+		1. Accedi alla pagina dettagli Sito Web su Konsolex
+		2. Apri la finestra Modifica Direttive PHP 3. Aggiungi la direttiva di tuo interesse, ad esempio upload_max_filesize = 10M. Puoi verificare aggiungendo, attraverso ftp, nella cartella /web, un file phpinfo.php:
+<?php
+phpinfo( );
+?>
+e verificare le modifiche.
+
+10. ACCESSO PANNELLO ISP SU SERVER WEBSERVER
+Caso 1: Non si accede al pannello ISP (ispconfig) e/o si presenta l'errore 'Possible attack detected. This action has been logged' per i server di tipo WEBSERVER
+Soluzione 1: L'accesso al pannello di ISP è possibile esclusivamente per i server non gestibili da KonsoleX. Verifica prima che i siti o le email non siano gestibili tramite KonsoleX nella pagina server.
+Se confermato, segui questi passaggi:
+	1. Verifica che il nome server sia correttamente puntato all'ip del server
+	2. Se ci sono problemi di accesso con l'indirizzo 'nome server' puoi utilizzare l'IP del server
+	3. L'URL sarà del tipo: https://1.1.1.1:8080
+	4. Accetta la connessione non sicura nel browser
+	5. In caso si riscontrassero ancora problemi, apri la pagina del browser in modalità anonima
+
+---GUIDA KONSOLEX---
+Gestione dei siti su Konsolex per i server di tipo WEBSERVER
+Guida della sezione ruolo MANAGE SITI WEB su server di tipo WEBSERVER del portale Konsolex:
+Cliccando sul nome del server troviamo tutta la lista dei siti presenti sul server. Cliccando poi sul sito di interesse entriamo nella gestione e all'interno troviamo tre Sezioni:
+        1. dettagli sito
+        2. backup
+        3. cronjobs
+    1.Sezione DETTAGLI SITO:
+Abbiamo: 
+Prima parte: troviamo delle azioni da poter compiere sul sito: 
+        A. Attivare e Disattivare i certificati SSL, sia commerciale che quello gratuito Let's Encrypt
+        B. Possiamo spegnere il sito
+        C. Disattivare il redirect http to https
+Seconda parte: dei blocchi di gestione del sito:
+        A. Specifiche Sito:
+url sito: possiamo rinominare il sito
+php versione: possiamo visualizzare e modificare la versione del php. Se la versione php desiderata non è presente nella lista va aperta una segnalazione al supporto di livello 2 che risponderà se è possibile aggiungerla o se va creato un nuovo server aggiornato.
+php mode: possiamo visualizzare e modificare il mode php (fast-cgi o disabilitare)
+hd quota: possiamo visualizzare e impostare lo spazio disco massimo utilizzabile dal sito escluso il database. Non è uno spazio allocato sul server.
+traffic quota: possiamo visualizzare e impostare il limite del traffico internet in e out del sito su base mensile
+Direttive php: possiamo visualizzare e inserire manualmente delle direttive php per il sito come ad esempio: upload_max_filesize = 10M. Si può testare la correttezza della direttiva inserita con la creazione di un file phpinfo.php
+Direttive Apache: possiamo visualizzare e inserire manualmente delle direttive apache per il sito.
+        B. Credenziali FTP
+Da qui è possibile creare e gestire l'utente FTP per l'accesso alle cartelle del server. Con queste tipologie di server la cartella principale è /web. 
+        C. Alias Sito
+  Inserire un alias sito.
+        D. Database:
+  Modifica, gestione e creazione del database per il sito. Da qui possiamo gestire il database del sito quindi modificare le password, modificare la quota disco, creare nuovi utenti del database, creare un accesso remoto al database. La modifica della password può impiegare fino a 2 minuti per essere correttamente impostata.
+	2. Sezione BACKUP:
+Visualizzare, schedulare o creare manualmente dei backup del sito. Non è possibile fare un download dei backup generati. Se si collega un cloudbox i backup non verranno fatti sul disco server quindi non andranno ad occupare spazio.
+	3. Sezione CRONJOB
+Visualizzare e aggiungere dei cronjob per il sito
+
+####TIPS Server di tipo WEBSERVER
+1. Per aggiungere un sito web al server bisogna accedere alla sezione APP -- SITI WEB e cliccare su AGGIUNGI SITO, da qui si apre la procedura di creazione sito web.

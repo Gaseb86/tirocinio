@@ -1,0 +1,78 @@
+@startuml Admin-Reply-Flow
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+skinparam NoteBackgroundColor white
+skinparam NoteBorderColor gray
+skinparam BoxPadding 30
+skinparam Padding 10
+skinparam PartitionPadding 80
+
+title Processo di Risposta Admin a Ticket
+
+partition "Validazione" {
+    start
+    
+    :Admin invia risposta al ticket;
+    note right: userId, message
+
+    if (Validazione input) then (non valido)
+        #Pink:Errore 400;
+        stop
+    endif
+}
+
+partition "Ricerca Utente e Ticket" {
+    :Cerca utente per userId;
+    
+    if (Utente trovato?) then (no)
+        #Pink:Errore 404;
+        stop
+    endif
+    
+    :Recupera ultimo ticket;
+    note right
+        Cerca il ticket più recente
+        per l'utente specificato
+    end note
+}
+
+partition "Creazione Risposta" {
+    :Crea messaggio admin;
+    note right
+        - Tipo: MessageType.Admin
+        - ticketOpen: true
+        - Collegamento al ticket
+    end note
+    
+    if (Messaggio creato?) then (no)
+        #Pink:Errore 500;
+        stop
+    endif
+}
+
+partition "Notifiche" {
+    fork
+        :Invia risposta su Telegram;
+        note right
+            Se l'utente ha un
+            telegram_id associato
+        end note
+    fork again
+        :Aggiorna stati ticket;
+        note right
+            - Setup client reply state
+            - Reset admin reply state
+        end note
+    fork again
+        :Notifica Konsolex;
+        note right
+            Aggiorna interfaccia
+            con nuovo messaggio
+        end note
+    end fork
+}
+
+:Conferma successo operazione;
+stop
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml State Diagram
+[*] --> Idle
+
+state Idle
+state "Rate Limited" as RL
+state "Processing Message" as PM
+state "Waiting OpenAI" as WO
+state "Error" as ERR
+
+Idle --> RL : Message Too Fast
+Idle --> PM : Valid Message
+PM --> WO : Get Reply
+WO --> Idle : Success
+WO --> ERR : API Error
+ERR --> Idle : Reset
+RL --> Idle : Timeout
+
+@enduml

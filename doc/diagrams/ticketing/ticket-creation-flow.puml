@@ -1,0 +1,103 @@
+@startuml Ticket Creation Flow
+!theme plain
+skinparam ActivityBackgroundColor White
+skinparam ActivityBorderColor #666666
+skinparam ArrowColor #666666
+skinparam ActivityDiamondBackgroundColor White
+skinparam NoteBackgroundColor #FFFFCC
+
+title Flusso di Creazione Ticket
+
+start
+
+:Utente invia messaggio\ncon richiesta complessa;
+
+note right
+  La richiesta può contenere:
+  - Problemi multi-livello
+  - Situazioni non standard
+  - Errori di sistema
+end note
+
+:AI analizza la richiesta;
+
+if (AI può risolvere?) then (Sì)
+  :Genera risposta\ne risolve autonomamente;
+  stop
+else (No)
+  if (Richiesta esplicita\ndi supporto umano?) then (Sì)
+    :AI conferma necessità\ndi escalation;
+  else (No)
+    :AI rileva autonomamente\nche è necessario escalare;
+    :AI suggerisce apertura ticket;
+    
+    if (Utente conferma?) then (No)
+      :AI tenta approccio\nalternativo;
+      stop
+    else (Sì)
+      :Utente accetta escalation;
+    endif
+  endif
+endif
+
+:Sistema invoca funzione openTicket;
+
+note right
+  In openai-handlers.ts
+  tramite executeTool()
+end note
+
+:Creazione struttura ticket\ncon parametri;
+
+note right
+  Parametri principali:
+  - UserId
+  - MsgId
+  - Riassunto del problema
+  - Cronologia rilevante
+end note
+
+:Sistema esegue sendMessageToAdmin;
+
+fork
+  :Aggiorna stato del messaggio\noriginale (ticketOpen = true);
+  note right
+    Via updateTicketStatusByMsgId()
+    nel repository dei messaggi
+  end note
+fork again
+  :Crea o aggiorna ticket\nnel sistema;
+  note right
+    Via getOrCreateTicket()
+    nel modulo ticketsCashe.ts
+  end note
+fork again
+  :Prepara bottoni interattivi\nper amministratori;
+  note right
+    - Reply
+    - Close Ticket
+    - View User Messages
+  end note
+end fork
+
+:Sistema invia notifica\nai canali amministrativi;
+
+fork
+  :Notifica Telegram\ncon bottoni interattivi;
+  note right
+    Inviato al primo admin in
+    TelegramAdminIdArray
+  end note
+fork again
+  :Aggiornamento dashboard\nweb in tempo reale;
+  note right
+    Tramite KONSOLEX_ENDPOINT.
+    MESSAGES_UPDATE
+  end note
+end fork
+
+:Conferma all'utente\ndell'apertura ticket;
+
+stop
+
+@enduml

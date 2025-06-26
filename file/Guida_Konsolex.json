@@ -1,0 +1,361 @@
+###MENU PRINCIPALE###
+{
+  "introduction": "Il pannello Konsolex offre una piattaforma centralizzata per gestire domini, server, applicazioni e componenti aggiuntivi. Questa guida fornisce una panoramica generale delle principali sezioni e funzionalità del pannello, pensata per aiutare gli utenti a navigare e sfruttare al meglio gli strumenti disponibili.",
+  "structure": {
+    "description": "Il pannello Konsolex è organizzato in diverse sezioni principali accessibili tramite la barra di navigazione superiore.",
+    "sections": [
+      {
+        "title": "Domini",
+        "description": "La sezione Domini consente di:",
+        "details": [
+          "Visualizzare un elenco di tutti i domini associati al proprio account.",
+          "Cercare domini specifici tramite una barra di ricerca.",
+          "Controllare informazioni essenziali per ciascun dominio."
+        ]
+      },
+      {
+        "title": "Server",
+        "description": "La sezione Server permette di:",
+        "details": [
+          "Visualizzare i server associati al proprio account.",
+          "Monitorare lo stato dei server e gestire configurazioni.",
+          "Effettuare azioni come il riavvio, l'aggiornamento o la sospensione di un server.",
+          "Effettuare backup e restore.",
+          "Cambiare l'RDNS o PTR."
+        ]
+      },
+      {
+        "title": "App",
+        "description": "La sezione App consente di:",
+        "details": [
+          "Installare, configurare e gestire applicazioni predefinite o personalizzate.",
+          "Monitorare lo stato delle applicazioni installate.",
+          "Aggiornare le applicazioni con un solo clic."
+        ]
+      },
+      {
+        "title": "Add-on",
+        "description": "Nella sezione Add-ons è possibile:",
+        "details": [
+          "Acquistare e gestire componenti aggiuntivi per espandere le funzionalità del pannello.",
+          "Visualizzare lo stato di ciascun add-on e configurarlo."
+        ]
+      },
+      {
+        "title": "Menu Profilo",
+        "description": "La sezione Menu Profilo permette di accedere a sezioni diverse dove è possibile:",
+        "details": [
+          "Profilo Utente: Modificare i dati del profilo e la password di accesso.",
+          "Sicurezza: Attivare 2FA.",
+          "Impostazioni: Gestire gli alert di Konsolex.Imposta su quali canali, a quali indirizzi email e quanti giorni prima ricevere la notifica di scadenza per ogni tipologia di servizio",
+          "Teams: Attivare Teams e personalizzare Konsolex. Puoi creare un accesso per i tuoi clienti impostando i permessi per ogni singolo servizio. Questa soluzione ti permette di offrire ai tuoi clienti una gestione autonoma dei servizi attivi.",
+          "Ricarica: Ricaricare il credito utente e visualizzare il saldo attuale",
+          "Movimenti: Visualizzare e scaricare tutti i movimenti del tuo accounto.",
+          "I Miei Servizi: Visualizzare e gestire i rinnovi dei servizi. Da questa sezione puoi attivare l'autorinnovo dei servizi e dei domini. Puoi rinnovare i servizi scaduti e fare il restore dei domini. Puoi visualizzare, attraverso il filtro, tutte le scadenze in un arco temporale nonchè visualizzare i servizi scaduti",
+          "Host: creare i tuoi host insernendo il nome, l'ip e la tipologia. Una volta creati possono essere selezionati in fase di registrazione/trasferimento dominio per avere una compilazione automatica dei record dns.""Rubrica: cra la rubrica dei tuoi clienti. Aggiungendo le anagrafiche potrai utilizzare per assegnarle come proprietario dei domini nonchè per creare gli accessi Teams."
+        ]
+      }
+    ]
+  }
+}
+
+###SEZIONE DOMINI###
+{
+  "sections": [
+    {
+      "title": "DOMINI: lista di tutti i domini",
+      "subsections": [
+        {
+          "title": "Dettagli",
+          "description": "Authinfo qui visualizzi l'authinfo del dominio e puoi generarlo o rigenerarlo nuovo se non ha funzionato a volte scadono e risultano errati. Troviamo anche il toggle Automigrazione, l'automigrazione serve se vuoi che al rinnovo del dominio cerca un altro registrar in konsolex che costi meno del prezzo di rinnovo attuale senza cambiare ne dns ne impostazioni."
+        },
+        {
+          "title": "Dns",
+          "description": "Gestisci e crea nuovi record dns.",
+          "details": [
+            "Record A dominio di primo livello: va inserito il . alla fine del valore NOME [es: dominio.tld.] il campo IP/DATA può essere solo un ip.",
+            "Record A dominio di terzo livello: non va inserito il . alla fine del valore NOME [es: www] il campo IP/DATA può essere solo un ip.",
+            "Record CNAME: è un alias dominio. Nel campo NOME va inserito un nome della zona esistente con . alla fine [es: cname.nomezona.tld.] e il campo IP/DATA può essere solo un nome a dominio e va inserito il . alla fine [es: cname.nomedominio.tld.].",
+            "Record MX: Nel campo NOME va inserito il nome dominio con . alla fine [es: tuodominio.tld.] e il campo IP/DATA può essere solo un record correttamente puntato e va inserito il . alla fine [es: mx.tuodominio.tld.].",
+            "Record NS: i record NS non sono record che si possono gestire come record ma puoi nella sezione cambia NS cambiare direttamente gli NS."
+          ]
+        },
+        {
+          "title": "Proprietari dominio",
+          "description": "Modifica i proprietari del dominio. Puoi modificare il Contatto registrante, il contatto amministratore, il contatto fatturazione e il contatto tecnico."
+        },
+        {
+          "title": "Cambia NS",
+          "description": "Solo da questa sezione puoi modificare i name server del dominio. Potrai selezionare NS Proprietari o inserire dei NS custom. Se i name server non vengono cambiati, per i domini .it, va fatto un check sul nic (https://www.nic.it/it/gestisci-il-tuo-it/dns-check). Per il corretto funzionamento devono essere configurati i record A e MX nelle zone dns"
+        },
+        {
+          "title": "Modifica email per la verifica della email admin del dominio",
+          "description": "Per modificare l'indirizzo email di riferimento per effettuare la verifica del dominio procedere al cambio proprietario dalla sezione Proprietario Dominio del dominio. Suggeriamo di creare o modificare il contatto dalla sezione Cliente del menu profilo. Se la mail non viene verificata per i domini .com si ha un blocco dei name server che causa il blocco dei dns e, quindi, lo stato di offline per i servizi associati quali, ad esempio, mail e sito web"
+        },
+        {
+          "title": "Verifica dominio per estensioni .it e .com",
+          "description": "Tempistiche e prassi per la verifica domini .it e .com",
+          "details": [
+            "domini .it: la conferma è richiesta e in caso di email non corretta o non più esistente va fatto il cambio proprietario (cambio owner) dalla sezione Proprietario Dominio del dominio",
+            "domini .com: Per i domini .com la conferma è obbligatoria e deve avvenire entro 7 giorni. È consigliato verificare la mail di riferimento prima del trasferimento. In caso di mancata verifica il nic blocca i name server. Nel caso in cui la mail non sia corretta o inesistente bisogna aprire un ticket."
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+###SEZIONE SERVER###
+{
+  "sections": [
+    {
+      "title": "SERVER",
+      "description": "Vedi la lista di tutti i server presenti su KonsoleX. Da qui puoi avere una visualizzazione del nome server, tipologia, scadenza, performance e status.",
+      "subsections": [
+        {
+          "title": "Specifiche",
+          "description": "In questa sezione visualizzi e gestisci il tuo server. Viene visualizzato: nome server, provider sul quale è erogato il server, tipologia di sistema utilizzato, indirizzo IP, orario server, stato dell'agente, consumo risorse (CPU, RAM, HDD, inode e log), statistiche TX e RX. Puoi effettuare queste azioni: accensione o spegnimento server, riavvio del server, accesso VNC, montare o smontare ISO, abilitare o disabilitare protezione server (se abilitato non puoi fare il rebuild), attivare o disattivare la business continuity. Puoi gestire il valore Rdns, attivare o disattivare il IPv6.",
+          "details": [
+            "Rdns: se non configurato correttamente, modificandolo con il nome del server, possono esserci problemi con il corretto funzionamento dei servizi, come ad esempio il servizio email.",
+            "Riavvio e spegnimento server: se ci sono servizi off nel server, le prime operazioni da compiere per il proprietario del server sono di effettuare il riavvio e, se dopo qualche minuto il servizio non è tornato online, provare a spegnere e successivamente riaccendere il server. Se nemmeno così parte, andare nella sezione SERVIZI e verificare che siano tutti online, se qualcuno fosse offline riavviarlo.",
+            "Agente: è importante che sia sempre attivo e aggiornato. Se non è attivo o la versione non è quella più recente, si riceve un avviso per attivarlo, riavviarlo, aggiornarlo o installarlo."
+          ]
+        },
+        {
+          "title": "Servizi",
+          "description": "Qui si vede lo status (attivo/non attivo), consumo CPU e si gestiscono i servizi attivi sul server, nello specifico e in base alla tipologia del server abbiamo questa lista di servizi:",
+          "details": [
+            "Apache2",
+            "Mysql (con funzione anche per la riparazione delle tabelle del database)",
+            "Rdp",
+            "IIS",
+            "SQL Server",
+            "Postfix",
+            "Dovecot",
+            "PHP Engine",
+            "Pure FTP",
+            "Memcached"
+          ]
+        },
+        {
+          "title": "Backup",
+          "description": "Se il servizio backup è attivo, vedremo la lista dei backup del server con la data di creazione e lo spazio. Da ogni backup è possibile effettuare queste azioni:",
+          "details": [
+            "Conversione in Snapshot",
+            "Rebuild del server",
+            "Eliminare il backup",
+            "Creare nuovo server"
+          ]
+        },
+        {
+          "title": "Upgrade",
+          "description": "Da questa sezione è possibile effettuare l'upgrade del server. A seconda del provider in cui è attivo il server possiamo avere anche l'opzione di 'upgrade solo CPU e RAM', abilitando questa opzione si effettua solo l'upgrade di CPU e RAM senza cambiare lo spazio disco, in questo modo è possibile effettuare un downgrade."
+        },
+        {
+          "title": "Rebuild",
+          "description": "Da questa sezione possiamo fare un rebuild del server scegliendo il sistema da installare. Questa operazione, irreversibile, cancella tutti i dati del server e crea un nuovo server. Si può effettuare questa operazione se l'opzione 'protezione server' non è attiva."
+        },
+        {
+          "title": "Ruolo",
+          "description": "In questa sezione, a seconda della tipologia di server, ci saranno delle voci che indirizzano alla gestione delle app presenti sul server, come ad esempio Siti Web (per la spiegazione vedere App/Siti Web), Domini Mail (per la spiegazione leggere App/Domini Mail), Manage Container.",
+          "subsubsections": [
+            {
+              "title": "Manage Container",
+              "description": "Puoi creare nuovi siti e gestirli. Nella schermata principale si vede la lista di tutti i siti web presenti sul server Container Web Site.",
+              "subsubdetails": [
+                "Visualizzare le risorse consumate (RAM, CPU, rete, disco).",
+                {
+                  "title": "Dettagli",
+                  "content": [
+                    "Gestire le limitazioni delle risorse RAM e CPU.",
+                    "Riavviare il container.",
+                    "Spegnere il container.",
+                    "Installare pacchetti aggiuntivi.",
+                    "Eseguire script custom.",
+                    "Ripristinare i privilegi.",
+                    "Riparare tabelle database."
+                  ]
+                },
+                {
+                  "title": "Database",
+                  "content": [
+                    "E' possibile creare un database. Per i siti web è consigliato utilizzare MariaDB. Una volta creato vengono visualizzati tutti i dati inerenti al database: Nome, User, Password, Host, Password Root e sarà possibile eliminarlo e attivare l'accesso remoto.",
+                    "Il campo DB Host è il valore da inserire per il corretto puntamento del database nelle configurazioni del sito web (solitamente il valore di default da sostituire nel file di configurazione del sito è localhost)."
+                  ]
+                },
+                {
+                  "title": "PhpMyAdmin",
+                  "content": [
+                    "Avvio del servizio PhpMyAdmin per accedere alla gestione del database. Una volta installato viene rilasciato il link, le password e account di accesso.",
+                    "Una volta terminato il lavoro sul database è consigliato disinstallare il servizio PhpMyAdmin, questo non elimina alcun dato nel database."
+                  ]
+                },
+                {
+                  "title": "Cronjob",
+                  "content": [
+                    "Creazione e gestione dei cronjob per singolo sito web container."
+                  ]
+                },
+                {
+                  "title": "FTP",
+                  "content": [
+                    "Da questa sezione si possono creare utenti FTP per, ad esempio, accedere con sistemi esterni tipo FileZilla.",
+                    "Per poter funzionare correttamente è necessario che il nome del server sia correttamente puntato nelle zone DNS del dominio che da il nome al server [esempio nome server: ctr25.dominio.tld il record A ctr25 deve essere puntato all'IP del server]."
+                  ]
+                },
+                {
+                  "title": "File Manager",
+                  "content": [
+                    "Avvio del servizio file manager per accedere alla gestione file del sito. Una volta installato viene rilasciato il link, la password e account di accesso.",
+                    "Una volta terminato il lavoro sui file è consigliato disinstallare il servizio file manager, questo non elimina alcun file del sito.",
+                    "Dal file manager è possibile uplodare, scaricare, modificare file e cartelle nonché editarli e gestire i file compressi."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{
+  "sections": [
+    {
+      "title": "App",
+      "description": "Da questa sezione è possibile visualizzare le applicazioni gestibili su Konsolex, siti web, domini mail, zone e record.",
+      "subsections": [
+        {
+          "title": "Siti Web",
+          "description": "Si vede la lista di tutti i siti web che si hanno su Konsolex. In questa schermata vediamo, per ogni sito web, stato, nome, host (nome server), motore PHP, versione PHP, attivo/disattivo, performance, azioni (cancellare sito web). Cliccando sul sito si entra nella gestione del sito web sul server specifico.",
+          "details": [
+            {
+              "title": "Dettagli",
+              "description": "Schermata principale per gestire i siti web. Qui è possibile creare certificati commerciali e let's encrypt, gestire i certificati SSL, spegnere il sito e modificare il redirect http to https ",
+              "subdetails": [
+                {
+                  "title": "Specifiche Sito",
+                  "content": "Da qui è possibile visualizzare e gestire valori del sito web tra cui: URL, versione PHP, PHP mode, quota HD, quota traffico, direttive PHP e direttive Apache."
+                },
+                {
+                  "title": "Credenziali FTP",
+                  "content": "Creazione, modifica e visualizzazione di account FTP."
+                },
+                {
+                  "title": "Alias Sito",
+                  "content": "Creazione, modifica e visualizzazione alias sito."
+                },
+                {
+                  "title": "Database",
+                  "content": "Creazione, modifica e visualizzazione database, utente database, quota HD, link di accesso PhpMyAdmin, abilitazione accesso remoto."
+                }
+              ]
+            },
+            {
+              "title": "Backups",
+              "content": "Gestione dei backup dei siti web, schedulazione e configurazione del numero di copie da conservare."
+            },
+            {
+              "title": "Cronjobs",
+              "content": "Gestione, creazione e modifica dei cronjobs per i siti web."
+            }
+          ]
+        },
+        {
+          "title": "Domini Mail",
+          "description": "Gestione di tutti i domini email presenti su Konsolex. Visualizzazione del nome dominio, numero di mailbox, filtro spam, stato attivo/disattivo, performance, azioni per ciascun dominio mail.",
+          "details": [
+            {
+              "title": "Dettagli dominio email",
+              "description": "Schermata principale per la gestione del dominio email con sezioni come:",
+              "subdetails": [
+                {
+                  "title": "Dettagli dominio mail",
+                  "content": "Gestione del filtro antispam, abilitazione DKIM con configurazione nelle zone DNS."
+                },
+                {
+                  "title": "Mailboxes",
+                  "content": "Gestione delle mailbox: password, quota disco, spazio occupato, descrizione, copia carbone, servizio di invio/ricezione, IMAP."
+                },
+                {
+                  "title": "Mail Automatica",
+                  "content": "Gestione della risposta automatica: oggetto, corpo, date di inizio e fine per ciascuna mailbox."
+                },
+                {
+                  "title": "Whitelist",
+                  "content": "Creazione e gestione di whitelist per ogni mailbox."
+                },
+                {
+                  "title": "Blacklist",
+                  "content": "Creazione e gestione di blacklist per ogni mailbox."
+                },
+                {
+                  "title": "Alias Mail",
+                  "content": "Creazione e gestione di alias per mailbox."
+                },
+                {
+                  "title": "Forward",
+                  "content": "Creazione e gestione di forward per le mailbox."
+                }
+              ]
+            },
+            {
+              "title": "Backup",
+              "content": "Gestione e aggiunta di schedulazioni per i backup delle mailbox."
+            }
+          ]
+        },
+        {
+          "title": "Zone e Record",
+          "description": "Gestione di tutte le zone DNS di Konsolex: stato, nome, numero di record DNS, admin-c, TTL, abilitazione, disabilitazione o eliminazione delle zone."
+        }
+      ]
+    },
+    {
+      "title": "Addons",
+      "description": "Lista di tutti gli addons presenti su Konsolex, con opzioni di gestione e visualizzazione.",
+      "subsections": [
+        {
+          "title": "Cloudbox",
+          "description": "Visualizzazione e gestione dei Cloudbox: nome, stato, dimensione e scadenza.",
+          "details": [
+            {
+              "title": "Dettagli",
+              "description": "Gestione di nome, datacenter e consumi dischi con menu dedicati.",
+              "subdetails": [
+                {
+                  "title": "Dettagli",
+                  "content": "Nome, utente, password e host del Cloudbox."
+                },
+                {
+                  "title": "Impostazioni",
+                  "content": "Abilitazione e disabilitazione di protocolli come Samba, Webdav, SSH, External reachability."
+                },
+                {
+                  "title": "Comandi",
+                  "content": "Visualizzazione dei comandi di collegamento per Windows, Linux Fstab e montaggio Linux."
+                }
+              ]
+            },
+            {
+              "title": "Snapshot",
+              "content": "Visualizzazione, creazione, eliminazione e schedulazione delle snapshot del Cloudbox."
+            },
+            {
+              "title": "Upgrade",
+              "content": "Gestione dell'incremento di spazio per il Cloudbox."
+            }
+          ]
+        },
+        {
+          "title": "Cloudbucket",
+          "description": "Gestione dei Cloudbucket: nome, stato, server collegato, dimensione, creazione ed eliminazione."
+        },
+        {
+          "title": "Floating IP",
+          "description": "Gestione degli IP flottanti: aggiunta, collegamento a server, modifica RDNS, protezione e eliminazione."
+        }
+      ]
+    }
+  ]
+}

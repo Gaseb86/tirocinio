@@ -1,0 +1,31 @@
+@startuml Request Distribution Chart
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName "Arial"
+skinparam arrowColor black
+skinparam stereotypeCBackgroundColor #A9DCDF
+skinparam stereotypeCBackgroundColor<<Boundary>> #ADD1B2
+
+title Distribuzione delle Richieste di Supporto per Categoria
+
+pie {
+  "Riavvii Server" 34
+  "Problemi DNS" 27
+  "Configurazione Email" 18
+  "Certificati SSL" 12
+  "Problemi Container" 7
+  "Altre Richieste" 2
+}
+
+note bottom of "Riavvii Server"
+  Le richieste di riavvio server
+  rappresentano la categoria
+  con maggior automazione (92%)
+end note
+
+note bottom of "Problemi DNS"
+  Seconda categoria per volume,
+  con tasso di automazione dell'83%
+end note
+
+@enduml

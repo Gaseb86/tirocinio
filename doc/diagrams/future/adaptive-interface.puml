@@ -1,0 +1,134 @@
+@startuml Adaptive Interface
+
+!theme plain
+skinparam backgroundColor white
+skinparam classFontSize 14
+skinparam classFontName Arial
+
+title "Sistema di Interfaccia Adattiva"
+
+package "User Profiling" as UP {
+  class "User Profiler" as UserProfiler {
+    + analyzeInteractions()
+    + detectTechnicalLevel()
+    + identifyPreferences()
+  }
+  
+  class "User Profile" as UserProfile {
+    + technicalLevel: int
+    + preferredDetailLevel: int
+    + communicationStyle: Style
+    + previousTopics: List<Topic>
+  }
+  
+  class "Interaction History" as History {
+    + pastQueries: List<Query>
+    + responseEffectiveness: Map<Query, Score>
+    + topicFrequency: Map<Topic, Count>
+  }
+}
+
+package "Interface Adaptation" as IA {
+  class "Message Formatter" as Formatter {
+    + adaptResponseComplexity()
+    + adjustTechnicalTerminology()
+    + personalizeExamples()
+  }
+  
+  class "Visual Customizer" as Visual {
+    + adjustDetailLevel()
+    + selectAppropriateVisuals()
+    + formatCodeSamples()
+  }
+  
+  class "Interaction Flow" as Flow {
+    + determineFollowUpQuestions()
+    + suggestRelatedTopics()
+    + offerAdditionalResources()
+  }
+}
+
+package "Response Generation" as RG {
+  class "Response Generator" as Generator {
+    + generateBaseResponse()
+    + applyFormatting()
+    + incorporateHistory()
+    + addContextualElements()
+  }
+  
+  class "Response Template" as Template {
+    + baseStructure: Structure
+    + placeholders: Map<String, Content>
+    + stylistic: StyleOptions
+  }
+  
+  class "Response Evaluator" as Evaluator {
+    + assessClarity()
+    + checkCompleteness()
+    + verifyAccuracy()
+    + estimateEffectiveness()
+  }
+}
+
+package "Interaction Channels" as IC {
+  class "Telegram Interface" as Telegram {
+    + formatForTelegram()
+    + useAppropriateMarkdown()
+    + considerScreenSize()
+  }
+  
+  class "Web Interface" as Web {
+    + useRichFormatting()
+    + incorporateInteractiveElements()
+    + adaptToDeviceCapabilities()
+  }
+  
+  class "Email Interface" as Email {
+    + structureForEmail()
+    + ensureReadability()
+    + includeAppropriateAttachments()
+  }
+}
+
+' Relationships
+UserProfiler --> UserProfile : creates/updates
+UserProfiler --> History : analyzes
+History --> UserProfile : informs
+
+UserProfile --> Formatter : guides
+UserProfile --> Visual : informs
+UserProfile --> Flow : directs
+
+Generator --> Template : uses
+Generator --> UserProfile : considers
+Evaluator --> Generator : provides feedback
+
+Formatter --> Generator : applies to
+Visual --> Generator : enhances
+Flow --> Generator : structures
+
+Generator --> Telegram : outputs to
+Generator --> Web : outputs to
+Generator --> Email : outputs to
+
+note bottom of UserProfile
+  Il profilo utente evolve nel tempo
+  basandosi su interazioni continue
+  e feedback impliciti/espliciti
+end note
+
+note bottom of Generator
+  Il generatore bilancia:
+  - Accuratezza tecnica
+  - Accessibilità
+  - Stile comunicativo
+  - Contesto della conversazione
+end note
+
+note right of IC
+  Ogni canale riceve lo stesso contenuto
+  ma formattato specificamente per
+  ottimizzare l'esperienza su quel medium
+end note
+
+@enduml

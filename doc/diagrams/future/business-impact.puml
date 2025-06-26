@@ -1,0 +1,89 @@
+@startuml Business Impact Analysis
+
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontSize 14
+skinparam arrowThickness 2
+
+title "Impatto dell'Assistente AI sul Business"
+
+' Start with "Before AI"
+rectangle "Prima dell'Assistente AI" as Before {
+  rectangle "Supporto Tecnico" as BeforeSupport {
+    rectangle "Disponibilità: 8:30-18:00\nLun-Ven" as BeforeAvailability #FFCCCC
+    rectangle "Tempo prima risposta: 4.7h" as BeforeResponseTime #FFCCCC
+    rectangle "Capacità gestione picchi: Limitata" as BeforePeaks #FFCCCC
+  }
+  
+  rectangle "Costi Operativi" as BeforeCosts {
+    rectangle "Team supporto dedicato" as BeforeTeam #FFCCCC
+    rectangle "Costi formazione elevati" as BeforeTraining #FFCCCC
+  }
+  
+  rectangle "Esperienza Cliente" as BeforeCX {
+    rectangle "Tempi attesa variabili" as BeforeWait #FFCCCC
+    rectangle "Incoerenze nelle risposte" as BeforeConsistency #FFCCCC
+    rectangle "Nessun supporto fuori orario" as BeforeOffHours #FFCCCC
+  }
+}
+
+' Define "After AI"
+rectangle "Dopo l'Assistente AI" as After {
+  rectangle "Supporto Tecnico" as AfterSupport {
+    rectangle "Disponibilità: 24/7/365" as AfterAvailability #CCFFCC
+    rectangle "Tempo prima risposta: <2s" as AfterResponseTime #CCFFCC
+    rectangle "Capacità gestione picchi: Illimitata" as AfterPeaks #CCFFCC
+  }
+  
+  rectangle "Costi Operativi" as AfterCosts {
+    rectangle "Riduzione 45% costi supporto" as AfterReduction #CCFFCC
+    rectangle "Focalizzazione su casi complessi" as AfterFocus #CCFFCC
+    rectangle "Conoscenza centralizzata" as AfterKnowledge #CCFFCC
+  }
+  
+  rectangle "Esperienza Cliente" as AfterCX {
+    rectangle "Risposta immediata" as AfterResponse #CCFFCC
+    rectangle "Coerenza nelle risposte" as AfterConsistency #CCFFCC
+    rectangle "Maggiore risoluzione al primo contatto" as AfterResolution #CCFFCC
+  }
+}
+
+' Define "Business Results"
+rectangle "Risultati di Business" as Results {
+  rectangle "Operativi" as OpResults {
+    rectangle "78% automazione richieste" as AutomationRate #D6EAF8
+    rectangle "Riduzione 72% carico operatori" as WorkloadReduction #D6EAF8
+  }
+  
+  rectangle "Finanziari" as FinResults {
+    rectangle "ROI positivo in 4 mesi" as ROI #D6EAF8
+    rectangle "Riduzione 45% costi operativi" as CostReduction #D6EAF8
+  }
+  
+  rectangle "Strategici" as StratResults {
+    rectangle "Vantaggio competitivo" as Advantage #D6EAF8
+    rectangle "Maggiore scalabilità" as Scalability #D6EAF8
+    rectangle "Insights da dati interazioni" as Insights #D6EAF8
+  }
+}
+
+' Create connections
+Before -[hidden]right-> After
+After -[hidden]right-> Results
+
+BeforeAvailability -[#red]-> AfterAvailability : Miglioramento
+BeforeResponseTime -[#red]-> AfterResponseTime : Riduzione 99.9%
+BeforePeaks -[#red]-> AfterPeaks : Eliminazione limite
+
+BeforeTeam -[#red]-> AfterReduction : Ottimizzazione
+BeforeTraining -[#red]-> AfterKnowledge : Centralizzazione
+
+BeforeWait -[#red]-> AfterResponse : Eliminazione
+BeforeConsistency -[#red]-> AfterConsistency : Standardizzazione
+BeforeOffHours -[#red]-> AfterAvailability : Copertura completa
+
+AfterSupport -[#blue]-> OpResults : Genera
+AfterCosts -[#blue]-> FinResults : Impatta
+AfterCX -[#blue]-> StratResults : Contribuisce
+
+@enduml

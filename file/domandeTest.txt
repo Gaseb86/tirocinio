@@ -1,0 +1,12 @@
+Posso avere il listino prezzi
+ricevo troppe email di scadenza dei servizi
+Come posso eliminare un server?
+Posso fare l'upgrade da fc03 a fc20?
+Un dominio email non riceve posta elettronica
+non è possibile sapere quanto occupa una casella?
+Rinnovo Dominio
+esempio-dominio.it NON è presente nella lista domini ma nell'hosting si
+Problemi con certificato SSL Let's Encrypt per siti web
+Problemi con certificato SSL Let's Encrypt per container
+Problemi con certificato SSL commerciale
+Il servizio o i dati richiesti non sono su server dedicati ma in hosting

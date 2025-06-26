@@ -1,0 +1,85 @@
+@startuml OpenaAI-Message-Creation-Flow
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+skinparam ActivityDiamondBackgroundColor white
+skinparam NoteBackgroundColor white
+skinparam NoteBorderColor gray
+skinparam ArrowColor black
+skinparam ActivityBorderThickness 1
+
+title Processo di Creazione e Gestione Messaggio OpenAI
+
+partition "Inizializzazione" {
+    start
+    :Ricevi messaggio utente;
+    note right: user_id, thread_id, message
+    
+    :Crea messaggio nel thread OpenAI;
+    note right: role: "user"\ncontent: messaggio
+    
+    :Configura run OpenAI;
+    note right 
+        - assistant_id
+        - tools: openaiTools
+        - temperature: 0.1
+        - max_tokens: 10000
+    end note
+}
+
+partition "Gestione Run" {
+    :Avvia waitForResponse();
+    
+    while (Verifica stato run) is (In corso)
+        if (Status check) then (requires_action)
+            :Esegui handleToolCalls;
+            note right
+                - Chiamata funzioni
+                - Processo risultati
+                - Invio outputs
+            end note
+            :Continua esecuzione;
+            
+        elseif (Status) then (completed)
+            :Attendi sincronizzazione;
+            note right: Delay 2000ms
+            
+        else (failed/expired)
+            #LightPink:Crea nuovo thread;
+            #LightPink:Aggiorna utente;
+            #LightPink:Segnala INVALID_RESPONSE;
+            detach
+        endif
+    endwhile (Completato)
+}
+
+partition "Analisi Risultati" {
+    :Recupera run steps;
+    if (Score check) then (disponibile)
+        :Salva relevance score;
+    endif
+    
+    :Recupera risposta assistant;
+    note right
+        Validazione formato
+        e contenuto risposta
+    end note
+}
+
+partition "Gestione Errori" {
+    if (Errori rilevati?) then (si)
+        switch (Tipo errore)
+        case (INVALID_RESPONSE)
+            :Messaggio errore validazione;
+        case (TIMEOUT)
+            :Reset thread e notifica timeout;
+        case (altro)
+            :Errore generico;
+        endswitch
+    else (no)
+        :Formatta risposta;
+    endif
+}
+
+stop
+
+@enduml

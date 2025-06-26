@@ -1,0 +1,58 @@
+// TECNICA-ZIMBRA.txt
+[ZIMBRA ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per server:
+- ZIMBRA
+Se il tuo server non è di questi tipi, consulta il file appropriato.
+
+1.PROBLEMA CERTIFICATO SU SERVER ZIMBRA
+Caso 1: Il certificato è scaduto o deve essere installato sul server di tipo ZIMBRA
+Soluzione 1: Puoi installare il certificato accedendo al pannello admin di zimbra [nomeserver:7071] nella sezione Configura-->Certificati. Una volta installato va riavviato il server.
+Puoi richiedere al supporto di livello 2 l'installazione del certificato commerciale
+
+2. PROBLEMA RICEZIONE EMAIL SU SERVER TIPO ZIMBRA
+Caso 1: Problema ricezione email su un solo account email su server di tipo ZIMBRA
+Soluzione 1: Se il problema è su un singolo account email e nello stesso dominio email gli altri account funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono ricevute sulla webmail. Se vengono ricevute il problema è sul client, se non vengono ricevute..
+    2. aumentare la quota disco impostata sull'account dal pannello admin di Zimbra
+Caso 2: Problema di ricezione su tutti gli account di un solo dominio email su server di tipo ZIMBRA
+Soluzione 2: Se il problema è su un singolo dominio email e gli altri domini email del server funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono ricevute sulla webmail. Se vengono ricevute il problema è sul client, se non vengono ricevute..
+    2. verificare la corretta configurazione e propagazione dei record MX e record A mx
+    3. aumentare la quota disco impostata sull'account dal pannello admin di Zimbra
+Caso 3: tutti gli account e/o i domini email non ricevono posta su server di tipo ZIMBRA
+Soluzione 3:Se nessun account o dominio email del server riceve posta bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica lo spazio del server
+    2. Verifica se dalla webmail il servizio funziona. Se funziona il problema è sui client di posta ma puoi provare a proseguire con le operazioni
+    3. Riavvia il server
+####TIPS: la propagazione dei record può essere verificata attraverso il servizio whtasmydns.net
+
+3. PROBLEMA INVIO EMAIL SU SERVER ZIMBRA
+Caso 1: Impossibile inviare allegati con firma digitale da account email su server di tipo ZIMBRA
+Soluzione 1: Se non riesci ad inviare allegati con firma digitale (formato pm7) prova a metterli in una cartella compressa e inviarli nuovamente. Alcuni gestori di posta vedono come sospetti i file in formato pm7
+Caso 2: Problema invio email da un solo account email su server di tipo ZIMBRA
+Soluzione 2: Se il problema è su un singolo account email e nello stesso dominio email gli altri account funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono inviate dalla webmail. Se vengono inviate il problema è sul client, se non vengono inviate..
+    2. verificare sull'account dal pannello admin di Zimbra se è stato disabilitato il servizio di invio
+    3. aumentare la quota disco impostata sull'account dal pannello admin di Zimbra
+Caso 3: Problema di invio da tutti gli account di un solo dominio email su server di tipo ZIMBRA
+Soluzione 3: Se il problema è su un singolo dominio email e gli altri domini email del server funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono inviate dalla webmail. Se vengono inviate il problema è sul client, se non vengono inviate..
+    2. fare un test di invio su mail-tester.comv e correggere eventuali errori segnalati
+    3. riavviare il server
+Caso 4: Non è possibile inviare da Nessun account e dominio email su un server di tipo ZIMBRA
+Soluzione 4: Se nessun account o dominio email del server invia posta bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica lo spazio del server
+    2. verifica della corretta configurazione del valore Rdns nella sezione server
+    3. Verifica della corretta propagazione del nome server. Deve essere inserito nei record dns come un normale dominio di terzo livello
+    4. Verifica se dalla webmail il servizio funziona facendo un test col servizio mail-tester.com per verificare se ci sono problematiche di configurazione. Se funziona il problema è sui client di posta ma puoi provare a proseguire con le operazioni
+    5. Riavvia il server 
+
+4. PROBLEMA INVIO EMAIL IN SPAM SU SERVER ZIMBRA
+Caso 1. Se l'invio da server di tipo ZIMBRA va in spam del destinatario
+Soluzione 1: Se le mail inviate vanno in spam bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi passaggi
+    1. Verifica che il valore Rdns (reverse dns) sia corretto nella sezione server. Deve essere identico al nome del server
+    2. Verifica che il nome server sia propagato correttamente. Deve essere come un normale dominio di terzo livello
+    3. Prova ad inviare da webmail. Se da webmail funziona, allora il problema è nella configurazione del client di posta.
+    4. Controlla la corretta configurazione dell'account di posta usando servizi come mail-tester.com ed effettua le operazioni necessarie per raggiungere almeno un valore di 9/10
+    5. Verifica eventuali segnalazioni di blacklist del tuo IP su https://mxtoolbox.com/blacklists.aspx. In caso di blocco, segui le istruzioni di delisting.
+    6. Per specifici provider, segui le loro indicazioni: Microsoft/Outlook: https://sender.office.com/ , Google: https://support.google.com/mail/contact/gmail_bulk_sender_escalation?rd=2

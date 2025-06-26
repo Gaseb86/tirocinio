@@ -1,0 +1,48 @@
+@startuml Request Types Distribution
+!theme plain
+skinparam backgroundColor white
+
+title Distribuzione delle Tipologie di Richieste
+
+scale 1.3
+
+skinparam rectangleBorderColor black
+skinparam rectangleBackgroundColor white
+
+rectangle "Livello di Complessità" {
+  rectangle "Richieste Semplici\n(62%)" as Simple #CCFFCC
+  rectangle "Richieste Medie\n(28%)" as Medium #FFFFCC
+  rectangle "Richieste Complesse\n(10%)" as Complex #FFCCCC
+}
+
+rectangle "Orario Richieste" {
+  rectangle "Durante Orario\nLavorativo (65%)" as WorkHours #CCFFFF
+  rectangle "Fuori Orario\nLavorativo (35%)" as AfterHours #CCCCFF
+}
+
+rectangle "Esito Risoluzione" {
+  rectangle "Risolte da AI\n(78%)" as AIResolved #CCFFCC
+  rectangle "Escalate a Operatori\n(22%)" as HumanResolved #FFCCCC
+}
+
+Simple -[hidden]-> Medium
+Medium -[hidden]-> Complex
+
+WorkHours -[hidden]-> AfterHours
+
+AIResolved -[hidden]-> HumanResolved
+
+note bottom of AfterHours
+  **Valore aggiunto AI**: 
+  Il 35% delle richieste avviene
+  fuori dall'orario lavorativo,
+  ora gestite immediatamente
+end note
+
+note bottom of AIResolved
+  L'AI risolve autonomamente il 78%
+  delle richieste totali, con un tasso
+  più alto (92%) per le richieste semplici
+end note
+
+@enduml

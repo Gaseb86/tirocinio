@@ -1,0 +1,115 @@
+@startuml Ticket Interaction Sequence Diagram
+!theme plain
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "Utente" as User
+participant "Telegram Bot" as TgBot
+participant "OpenAI Handler" as AIHandler
+participant "Sistema Ticketing" as TicketSystem
+participant "Repository Messaggi" as MsgRepo
+participant "Web Server" as WebServer
+actor "Amministratore" as Admin
+database "Database" as DB
+
+box "Fase 1: Rilevamento e Creazione" #LightBlue
+  User -> TgBot: Invia messaggio con problema complesso
+  activate TgBot
+  
+  TgBot -> MsgRepo: Salva messaggio utente
+  activate MsgRepo
+  MsgRepo -> DB: Persiste messaggio
+  MsgRepo --> TgBot: Conferma salvataggio
+  deactivate MsgRepo
+  
+  TgBot -> AIHandler: Richiede analisi messaggio
+  activate AIHandler
+  AIHandler -> AIHandler: Identifica necessità di escalation
+  AIHandler --> TgBot: Suggerisce apertura ticket
+  deactivate AIHandler
+  
+  TgBot --> User: Chiede conferma per aprire ticket
+  User -> TgBot: Conferma apertura ticket
+  
+  TgBot -> TicketSystem: sendMessageToAdmin()
+  activate TicketSystem
+  
+  TicketSystem -> MsgRepo: updateTicketStatusByMsgId()
+  TicketSystem -> MsgRepo: getOrCreateTicket()
+  TicketSystem -> TgBot: Notifica amministratori
+  deactivate TicketSystem
+  
+  TgBot --> User: Conferma creazione ticket
+  deactivate TgBot
+end box
+
+box "Fase 2: Gestione e Risposta" #LightYellow
+  TgBot -> Admin: Invia notifica con bottoni interattivi
+  activate Admin
+  
+  alt Risposta via Telegram
+    Admin -> TgBot: Seleziona "Reply" e invia risposta
+    activate TgBot
+    
+    TgBot -> TicketSystem: Processa risposta amministratore
+    activate TicketSystem
+    TicketSystem -> MsgRepo: Crea messaggio di tipo Admin
+    TicketSystem -> DB: Aggiorna stato ticket
+    deactivate TicketSystem
+    
+    TgBot -> User: Invia risposta admin all'utente
+    deactivate TgBot
+  else Risposta via Dashboard Web
+    Admin -> WebServer: Accede a ADMIN_API.ADMIN_TICKET_LIST
+    activate WebServer
+    
+    WebServer -> TicketSystem: getAllOpenTickets()
+    WebServer --> Admin: Mostra lista ticket
+    
+    Admin -> WebServer: Invia risposta via ADMIN_API.ADMIN_REPLY_TICKET
+    WebServer -> TicketSystem: Processa risposta
+    TicketSystem -> MsgRepo: Crea messaggio di tipo Admin
+    
+    WebServer -> TgBot: Richiede invio notifica
+    TgBot -> User: Invia risposta admin all'utente
+    
+    WebServer --> Admin: Conferma invio risposta
+    deactivate WebServer
+  end
+  deactivate Admin
+end box
+
+box "Fase 3: Risoluzione e Chiusura" #LightGreen
+  User -> TgBot: Conferma risoluzione problema
+  activate TgBot
+  
+  TgBot -> TicketSystem: Aggiorna stato conversazione
+  activate TicketSystem
+  
+  alt Chiusura automatica
+    TicketSystem -> TicketSystem: Rileva risoluzione
+    TicketSystem -> TicketSystem: closeTicket()
+  else Chiusura manuale da admin
+    Admin -> TgBot: Seleziona "Close Ticket"
+    TgBot -> TicketSystem: closeTicket()
+  else Chiusura da dashboard
+    Admin -> WebServer: Richiede ADMIN_API.CLOSE_TICKET
+    WebServer -> TicketSystem: closeTicket()
+  end
+  
+  TicketSystem -> DB: Aggiorna stato ticket a chiuso
+  TicketSystem -> TgBot: Notifica chiusura
+  deactivate TicketSystem
+  
+  TgBot --> User: Conferma chiusura ticket
+  TgBot --> Admin: Notifica chiusura ticket
+  deactivate TgBot
+  
+  opt Raccolta feedback
+    TgBot -> User: Richiede valutazione supporto
+    User -> TgBot: Invia feedback
+    TgBot -> DB: Salva feedback per analisi
+  end
+end box
+
+@enduml

@@ -1,0 +1,143 @@
+// TECNICA-MAILSERVER.txt
+[MAILSERVER ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per server:
+- MAILSERVER
+Se il tuo server non è di questi tipi, consulta il file appropriato.
+
+
+	    1. PROBLEMA RICEZIONE EMAIL SU SERVER TIPO MAILSERVER
+Caso 1: Problema ricezione email su un solo account email su server di tipo MAILSERVER
+Soluzione 1: Se il problema è su un singolo account email e nello stesso dominio email gli altri account funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono ricevute sulla webmail. Se vengono ricevute il problema è sul client, se non vengono ricevute..
+    2. verificare dalla gestione dell'account su Konsolex se è stato disabilitato il servizio di ricezione
+    3. aumentare la quota disco impostata dalla gestione dell'account su Konsolex
+Caso 2: Problema di ricezione su tutti gli account di un solo dominio email su server di tipo MAILSERVER
+Soluzione 2: Se il problema è su un singolo dominio email e gli altri domini email del server funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono ricevute sulla webmail. Se vengono ricevute il problema è sul client, se non vengono ricevute..
+    2. verificare la corretta configurazione e propagazione dei record MX e record A mx
+    3. aumentare la quota disco impostata dalla gestione dell'account su Konsolex
+Caso 3: tutti gli account e/o i domini email non ricevono posta su server di tipo MAILSERVER
+Soluzione 3:Se nessun account o dominio email del server riceve posta bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica lo spazio del server
+    2. Verifica se dalla webmail il servizio funziona. Se funziona il problema è sui client di posta ma puoi provare a proseguire con le operazioni
+    3. Riavvia il servizio postfix dalla sezione Servizi del Server
+    4. Riavvia il server
+Caso 4: Problema ricezione su un server di tipo MAILSERVER. Non si riceve la posta da un dominio email
+Soluzioen 4: Se non si riceve posta da uno specifico indirizzo email o dominio email bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Modifica le impostazioni antispam del dominio email e/o dell'account del destinatario.
+    2. Aggiungere il dominio mittente in whitelist (se l'opzione è attiva sul server).
+    3. Impostare correttamente il gateway se attivo sul servizio di posta in uso.
+    4. Il problema può essere causato da configurazioni errate del mittente. Non potendo intervenire direttamente sulle configurazioni del mittente si consiglia di richiedere al mittente di verificare se riceve errori al momento dell'invio e se può effettuare un controllo interno delle configurazioni (SPF, DKIM, DMARC) 
+####TIPS: la propagazione dei record può essere verificata attraverso il servizio whtasmydns.net
+
+	    2. PROBLEMA INVIO EMAIL SU SERVER MAILSERVER
+Caso 1: Impossibile inviare allegati con firma digitale da account email su server di tipo MAILSERVER
+Soluzione 1: Se non riesci ad inviare allegati con firma digitale (formato pm7) prova a metterli in una cartella compressa e inviarli nuovamente. Alcuni gestori di posta vedono come sospetti i file in formato pm7
+Caso 2: Problema invio email da un solo account email su server di tipo MAILSERVER
+Soluzione 2: Se il problema è su un singolo account email e nello stesso dominio email gli altri account funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono inviate dalla webmail. Se vengono inviate il problema è sul client, se non vengono inviate..
+    2. verificare dalla gestione dell'account su Konsolex se è stato disabilitato il servizio di invio
+    3. aumentare la quota disco impostata dalla gestione dell'account su Konsolex
+Caso 3: Problema di invio da tutti gli account di un solo dominio email su server di tipo MAILSERVER
+Soluzione 3: Se il problema è su un singolo dominio email e gli altri domini email del server funzionano correttamente bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. verificare se le mail vengono inviate dalla webmail. Se vengono inviate il problema è sul client, se non vengono inviate..
+    2. fare un test di invio su mail-tester.comv e correggere eventuali errori segnalati
+    3. riavviare il server
+Caso 4: Non è possibile inviare da Nessun account e dominio email su un server di tipo MAILSERVER
+Soluzione 4: Se nessun account o dominio email del server invia posta bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica lo spazio del server
+    2. verifica della corretta configurazione del valore Rdns nella sezione server
+    3. Verifica della corretta propagazione del nome server. Deve essere inserito nei record dns come un normale dominio di terzo livello
+    4. Verifica se dalla webmail il servizio funziona facendo un test col servizio mail-tester.com per verificare se ci sono problematiche di configurazione. Se funziona il problema è sui client di posta ma puoi provare a proseguire con le operazioni
+    5. Riavvia il servizio postfix dalla sezione Servizi del Server
+    6. Riavvia il server 
+
+	    3. PROBLEMI GESTIONE ACCOUNT SERVER MAILSERVER
+  Caso 1: Non si visualizzano gli account e i domini email su un server di tipo MAILSERVER
+  Soluzione 1: Se non visualizzi gli account o i domini email è semplicemente dovuto al fatto che i dati su konsolex sono presenti solo se creati su konsolex.
+
+	    4. PROBLEMI CON CLIENT EMAIL PER ACCOUNT SU SERVER MAILSERVER
+Caso 1: Certificato non riconosciuto sul client di posta per account su server di tipo MAILSERVER
+Soluzione 1: Se in fase di configurazione del client di posta viene menzionato un errore del certificato bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica del certificato SSL sul server e sulle porte accedendo al servizio https://www.sslshopper.com/ssl-checker.html ed esegui la verifica di: nomeserver.tld, nomeserver.tld:993, nomeserver.tld:995, nomeserver.tld:465.Se l'esito è positivo i certificati sono corretti.
+    2. verifica invio e ricezione da webmail
+    3. verifica su altro pc o altro client o altra rete
+    4. se il problema è su un solo account o un solo dominio email presente sul server allora il problema è obbligatoriamente legato al client o a qualche configurazione della rete/pc del cliente. Puoi provare come ultima soluzione un riavvio del server
+Caso 2: in fase di configurazione sul client l'account su server di tipo MAILSERVER risulta in spam
+Soluzione 2: Nella configurazione dell'account sul client di posta si riceve un errore di spam (ad esempio spam reject errore 554) bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica della presenza dei record DNS: MX, A (mx), SPF, DKIM
+    2. Test della propagazione dei record: verificare, attraverso https://www.whatsmydns.net/ la propagazione del record name server (NS) e, successivamente, degli altri record
+    3. Invio email da webmail utilizzando il servizio https://www.mail-tester.com/ e correggere eventuali errori.
+    4. se il problema è su un solo account o un solo dominio email presente sul server allora il problema è obbligatoriamente legato al client o a qualche configurazione della rete/pc del cliente. Puoi provare come ultima soluzione un riavvio del server
+Caso 3: Sincronizzazione email su client per account di posta su server di tipo MAILSERVER
+Soluzione 3: Se si hanno problemi di sincronizzazione sul client di posta delle email bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Verifica del certificato SSL sulle porte, accedi al servizio https://www.sslshopper.com/ssl-checker.html ed esegui la verifica con nomeserver.tld:993 :995 :465 se l'esito è positivo i certificati sono corretti
+    2. Verifica invio e ricezione da webmail
+    3. Prova tutte le possibili configurazioni proposte dal client (ti ricordo che le configurazioni sono tutte uguali per tutti gli account di posta presenti sul server)
+    4. Verifica spazio account, dominio e server
+    5. se il problema è su un solo account o un solo dominio email presente sul server allora il problema è obbligatoriamente legato al client o a qualche configurazione della rete/pc del cliente. Puoi provare come ultima soluzione un riavvio del server
+
+	    5. PROBLEMA ACCESSO WEBMAIL SU SERVER MAILSERVER
+Caso 1. Problema su tutti gli account email su server di tipo MAILSERVER
+Soluzione 1: Se non si può accedere alla webmail con tutti gli account email del server devi verificare lo spazio del server e, se lo spazio è disponibile, riavviare il server
+Caso 2. Problema di accesso con un solo account o dominio su server di tipo MAILSERVER
+Soluzione 2: Se non si può accedere alla webmail con un solo dominio o account email provare a modificare la password dell'account e successivamente riavviare il server
+
+	    6. PROBLEMA INVIO EMAIL IN SPAM SU SERVER MAILSERVER
+Caso 1. Se l'invio da server di tipo MAILSERVER va in spam del destinatario
+Soluzione 1: Se le mail inviate vanno in spam bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi passaggi
+    1. Verifica che il valore Rdns (reverse dns) sia corretto nella sezione server. Deve essere identico al nome del server
+    2. Verifica che il nome server sia propagato correttamente. Deve essere come un normale dominio di terzo livello
+    3. Prova ad inviare da webmail. Se da webmail funziona, allora il problema è nella configurazione del client di posta.
+    4. Controlla la corretta configurazione dell'account di posta usando servizi come mail-tester.com ed effettua le operazioni necessarie per raggiungere almeno un valore di 9/10
+    5. Verifica eventuali segnalazioni di blacklist del tuo IP su https://mxtoolbox.com/blacklists.aspx. In caso di blocco, segui le istruzioni di delisting.
+    6. Per specifici provider, segui le loro indicazioni: Microsoft/Outlook: https://sender.office.com/ , Google: https://support.google.com/mail/contact/gmail_bulk_sender_escalation?rd=2
+
+	    7. PROBLEMA RICEZIONE IN SPAM SU SERVER MAILSERVER
+Caso 1: Ricezione di posta da un dominio email in spam, su server di tipo MAILSERVER, ma in realtà non è spam
+Soluzione 1: Se si riceve posta indesiderata da uno specifico indirizzo email o dominio email ma in realtà non è spam bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Modifica le impostazioni antispam del dominio email e/o dell'account del destinatario.
+    2. Aggiungere il dominio mittente in whitelist (se l'opzione è attiva sul server).
+    3. Impostare correttamente il gateway se attivo sul servizio di posta in uso.
+    4. Il problema può essere causato da configurazioni errate del mittente. Non potendo intervenire direttamente sulle configurazioni del mittente si consiglia di richiedere al mittente di verificare se riceve errori al momento dell'invio e se può effettuare un controllo interno delle configurazioni (SPF, DKIM, DMARC) 
+Caso 2: Ricezione di posta da un dominio email che è spam ma si riceve in posta in arriva su server di tipo MAILSERVER
+Se si riceve posta indesiderata da uno specifico indirizzo email o dominio email bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi 
+    1. Modifica le impostazioni antispam del dominio email e/o dell'account del destinatario.
+    2. Aggiungere il dominio mittente in blacklist (se l'opzione è attiva sul server).
+    3. Impostare correttamente il gateway se attivo sul servizio di posta in uso.
+
+	    8. PROBLEMA AGENTE SU SERVER MAILSERVER
+L'agente è necessario per alcune funzionalità e operazioni da effettuare su Konsolex. 
+Caso 1: Durante l'aggiornamento l'agente torna alla vecchia versione. 
+Soluzione 1: Bisogna rilanciare l'aggiornamento e appena si visualizza l'agente aggiornato riavviarlo dal tasto riavvia agente.
+
+
+---GUIDA KONSOLEX---
+Gestione deile email su Konsolex per i server di tipo MAILSERVER
+Guida della sezione ruolo MANAGE EMAIL su server di tipo MAILSERVER del portale Konsolex:
+Cliccando troviamo tutta la lista dei domini-email presenti sul server. Cliccando poi sul dominio-email di interesse entriamo nella gestione e all'interno troviamo due Sezioni:
+      1. dettagli domini-email
+      2. backup
+	1. SEZIONE DETTAGLI DOMINI-EMAIL:
+Abbiamo: 
+    A. Dettagli dominio mail:
+Filtro Antispam: Gestione del filtro antispam per la gestione dello spam per le mail in entrata: E' possibile impostare il grado del filtro antispam o disabilitarlo.
+Abilitazione e gestione DKIM: DKIM (DomainKeys Identified Mail) è un sistema di autenticazione delle email che utilizza una firma crittografica per verificare che il messaggio provenga dal dominio legittimo e non sia stato alterato durante la trasmissione. Una volta abilitato si deve seguire la procedura di configurazione del record dns
+    B. Mailbox:
+Nome mailbox: visualizzi gli account email del dominio-email
+Password: visualizzi la password degli account email
+Quota: imposti lo spazio disco che può utilizzare ogni singolo account email. Lo spazio non è allocato.
+Spazio Occupato: lo spazio occupato da ogni singolo account email
+Copia Carbone: inserendo un indirizzo email questo riceverà la mail ricevuto dall'account email selezionato (inoltro automatico)
+Abilitazione o disabilitazioni di servizi di ricezione email, invio email e servizio imap per ogni singolo account email.
+Icone per azioni quali: aggiunta account email, modifica account emaill, eliminazione account email, modifica password account email
+    C. Mail Automatica: Possibilità di configurare una risposta automatica, per ogni singolo account email, alla ricezione di una mail.
+    D. Whitelist: Configurazione di domini-email o account-email per garantire che le mail ricevute da questi mittenti non risultino come spam.
+    E. Blacklist: Configurazione di domini-email o account-email per garantire che le mail ricevute da questi mittenti risultino come spam e siano bloccate per la ricezione.
+    F. Alias Mail: Creazione di un alias email
+	2. SEZIONE BACKUP:
+Abbiamo:
+Per ogni account email è possibile gestire, programmare o creare backup. Se si collega un cloudbox i backup non verranno fatti sul disco server quindi non andranno ad occupare spazio.
+####TIPS SERVER MAILSERVER
+1. Per aggiungere un dominio-email al server bisogna accedere alla sezione APP -- DOMINI EMAIL e cliccare su AGGIUNGI DOMINIO, da qui si apre la procedura di creazione dominio-email descritta nel file nominato SEZIONE_APP
+

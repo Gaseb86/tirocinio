@@ -1,0 +1,36 @@
+@startuml Conversation State Diagram
+
+[*] --> Initialized : User starts conversation
+
+Initialized --> Active : First message sent
+
+Active --> Active : Regular interaction
+Active --> AwaitingFunction : Function called
+Active --> AwaitingHumanSupport : Escalation requested
+Active --> Inactive : Timeout
+
+AwaitingFunction --> Active : Function completed
+AwaitingFunction --> Error : Function failed
+AwaitingFunction --> AwaitingHumanSupport : Requires human intervention
+
+AwaitingHumanSupport --> Active : Admin response sent
+AwaitingHumanSupport --> Resolved : Issue resolved by admin
+
+Error --> Active : Error handled
+Error --> AwaitingHumanSupport : Unrecoverable error
+
+Inactive --> Active : User resumes conversation
+Inactive --> [*] : Long inactivity
+
+Resolved --> Active : New issue raised
+Resolved --> Inactive : User satisfied
+
+state Active {
+  [*] --> Normal
+  Normal --> ContextRefreshing : Context limit approached
+  ContextRefreshing --> Normal : Context optimized
+  Normal --> KnowledgeSearching : Knowledge lookup needed
+  KnowledgeSearching --> Normal : Knowledge integrated
+}
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml Thread Management Diagram
+
+package "User Management" {
+  [User Registration] as Registration
+  [Thread Creation] as ThreadCreate
+  [User-Thread Association] as UserThread
+}
+
+package "Conversation Flow" {
+  [Message Reception] as MsgReceive
+  [Message Storage] as MsgStore
+  [Thread Update] as ThreadUpdate
+  [Response Generation] as Response
+}
+
+package "Thread Maintenance" {
+  [Thread Reset] as ThreadReset
+  [Context Optimization] as ContextOpt
+  [Error Recovery] as Recovery
+}
+
+cloud "OpenAI API" {
+  [Thread API] as ThreadAPI
+  [Message API] as MessageAPI
+  [Run API] as RunAPI
+}
+
+database "Database" {
+  [User Records] as UserDB
+  [Message History] as MsgDB
+}
+
+Registration --> ThreadCreate : triggers
+ThreadCreate --> ThreadAPI : creates new thread
+ThreadAPI --> UserThread : returns thread_id
+UserThread --> UserDB : stores association
+
+MsgReceive --> MsgStore : processes incoming message
+MsgStore --> MsgDB : persists message
+MsgStore --> ThreadUpdate : initiates thread update
+ThreadUpdate --> MessageAPI : adds message to thread
+ThreadUpdate --> RunAPI : requests processing
+RunAPI --> Response : generates AI response
+Response --> MsgStore : stores AI response
+
+ThreadReset --> ThreadAPI : creates new thread if needed
+Recovery --> ThreadReset : triggers on error
+ContextOpt --> MsgDB : queries relevant history
+ContextOpt --> ThreadUpdate : provides context
+
+note right of ThreadReset
+  Triggered by:
+  - Timeout errors
+  - Context overflow
+  - Explicit reset commands
+end note
+
+@enduml

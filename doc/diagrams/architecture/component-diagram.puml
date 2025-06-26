@@ -1,0 +1,76 @@
+@startuml Component Diagram
+
+package "Presentation Layer" {
+  [TelegramBot] as TgBot
+  [KonsolexInterface] as WebAdmin
+}
+
+package "Application Layer" {
+  [OpenAIHandler] as AIHandler
+  [EndpointHandler] as EndpointHandler
+  [TicketingSystem] as Tickets
+  [WebServer] as WebSrv
+  [AuxiliaryFunctions] as AuxFuncs
+  [TelegramCommandHandler] as TelegramCmd
+}
+
+package "Data Layer" {
+  [UserRepository] as UserRepo
+  [MessageRepository] as MsgRepo
+  [ScoreRepository] as ScoreRepo
+  database "MySQL Database" as DB
+}
+
+cloud "External Services" {
+  [OpenAI API] as OpenAI
+  [Konsolex API] as Konsolex
+  [Telegram API] as TelegramAPI
+}
+
+' Presentation to Application
+TgBot --> AIHandler : uses
+TgBot --> Tickets : notifies
+TgBot --> TelegramCmd : routes commands to
+WebAdmin --> WebSrv : accesses
+WebAdmin .> Tickets : manages
+WebAdmin ..> EndpointHandler : performs operations via
+
+' Application interconnections
+AIHandler --> AuxFuncs : uses
+AIHandler --> EndpointHandler : calls functions via
+WebSrv --> Tickets : manages
+WebSrv --> AIHandler : uses
+WebSrv --> EndpointHandler : calls functions via
+AuxFuncs --> Tickets : creates
+AuxFuncs --> EndpointHandler : uses
+TelegramCmd --> Tickets : manages tickets
+TelegramCmd --> EndpointHandler : executes operations
+TelegramCmd --> AIHandler : generates responses
+
+' Application to Data
+AIHandler --> UserRepo : queries/updates
+AIHandler --> MsgRepo : stores messages
+EndpointHandler --> UserRepo : retrieves user info
+EndpointHandler --> MsgRepo : stores/retrieves messages
+EndpointHandler --> ScoreRepo : accesses scores
+WebSrv --> UserRepo : queries/manages
+WebSrv --> MsgRepo : retrieves/manages
+AuxFuncs --> UserRepo : creates/updates
+AuxFuncs --> MsgRepo : creates/updates
+Tickets --> MsgRepo : manages tickets and associates with messages
+TelegramCmd --> UserRepo : retrieves user data
+TelegramCmd --> MsgRepo : manages messages
+
+' Data to Database
+UserRepo --> DB : persists
+MsgRepo --> DB : persists
+ScoreRepo --> DB : persists
+
+' External connections
+AIHandler --> OpenAI : requests completions
+EndpointHandler --> Konsolex : executes operations
+TgBot --> TelegramAPI : sends/receives messages
+WebSrv --> TelegramAPI : sends notifications
+TelegramCmd --> TelegramAPI : handles bot commands
+
+@enduml

@@ -1,0 +1,77 @@
+@startuml Error Handling Strategy
+
+!theme plain
+skinparam backgroundColor white
+
+title Multi-layered Error Handling Strategy
+
+package "Client Layer" {
+  [User Interface\nError Handling] as UIError
+  [Client-side\nValidation] as ClientValidation
+}
+
+package "API Layer" {
+  [Request\nValidation] as RequestValidation
+  [API Error\nHandler] as APIError
+  [Response\nFormation] as Response
+}
+
+package "Business Logic Layer" {
+  [Domain Logic\nError Handling] as DomainError
+  [Service Layer\nRecovery] as ServiceRecovery
+}
+
+package "Integration Layer" {
+  [OpenAI Error\nHandler] as OpenAIError
+  [Konsolex API\nError Handler] as KonsolexError
+  [Telegram API\nError Handler] as TelegramError
+}
+
+package "Data Layer" {
+  [Repository\nError Handling] as RepoError
+  [Database\nError Recovery] as DBError
+}
+
+package "Cross-cutting Concerns" {
+  [Logging\nInfrastructure] as Logging
+  [Monitoring\nSystem] as Monitoring
+  [Alert\nMechanism] as Alert
+}
+
+' Error flow
+UIError ..> ClientValidation : prevents
+RequestValidation ..> APIError : catches
+APIError ..> Response : formats
+DomainError ..> ServiceRecovery : triggers
+OpenAIError ..> DomainError : propagates
+KonsolexError ..> DomainError : propagates
+TelegramError ..> DomainError : propagates
+RepoError ..> DBError : handles
+DBError ..> DomainError : escalates
+
+' Cross-cutting connections
+Logging -[#blue]-> UIError : records
+Logging -[#blue]-> APIError : records
+Logging -[#blue]-> DomainError : records
+Logging -[#blue]-> OpenAIError : records
+Logging -[#blue]-> RepoError : records
+Monitoring -[#green]-> Logging : monitors
+Alert -[#red]-> Monitoring : triggers on threshold
+
+note right of OpenAIError
+  Handles:
+  - Timeout errors
+  - Invalid responses
+  - Rate limiting
+  - API availability issues
+end note
+
+note right of ServiceRecovery
+  Strategies:
+  - Retry mechanisms
+  - Thread reset
+  - Fallback responses
+  - Escalation to human
+end note
+
+@enduml

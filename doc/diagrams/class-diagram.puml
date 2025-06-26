@@ -1,0 +1,84 @@
+@startuml System-Architecture
+skinparam componentStyle uml2
+skinparam backgroundColor white
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+package "Core Modules" {
+  [WebServer] as WebServer
+  [TelegramBot] as TelegramBot
+  [OpenAIHandler] as OpenAIHandler
+  [TicketSystem] as TicketSystem
+}
+
+package "Utilities" {
+  [Environment] as Env
+  [Constants] as Const
+  [AuxFunctions] as Aux
+  [OpenAITool] as OAITool
+}
+
+package "Data Access" {
+  [MessageRepository] as MsgRepo
+  [UserRepository] as UserRepo
+  [ScoreRepository] as ScoreRepo
+  [Database] as DB
+}
+
+package "External Endpoints" {
+  [EndpointHandler] as Endpoint
+}
+
+package "Entities" {
+  [User] as User
+  [Message] as Message
+  [Assistant] as Assistant
+  [MessageType] as MsgType
+}
+
+package "External Systems" {
+  [OpenAI API] as OpenAI
+  [KonsolexAPI] as Konsolex
+  [Telegram API] as TelegramAPI
+}
+
+' Core module relationships
+WebServer --> TelegramBot : initializes
+WebServer --> OpenAIHandler : passes requests
+WebServer --> TicketSystem : manages tickets
+WebServer --> Endpoint : calls operations
+TelegramBot --> OpenAIHandler : processes messages
+
+' Data flow relationships
+WebServer --> MsgRepo : CRUD operations
+WebServer --> UserRepo : user management
+OpenAIHandler --> MsgRepo : stores responses
+OpenAIHandler --> UserRepo : thread management
+OpenAIHandler --> ScoreRepo : stores relevance
+TicketSystem --> MsgRepo : creates ticket messages
+
+' Utility usage
+OpenAIHandler --> OAITool : uses tools
+OpenAIHandler --> Aux : formats messages
+WebServer --> Aux : helper functions
+WebServer --> Const : constants & endpoints
+TelegramBot --> Const : commands & callbacks
+Endpoint --> Const : API endpoints
+
+' Entity relationships
+MsgRepo --> Message : manipulates
+UserRepo --> User : manipulates
+OpenAIHandler --> Assistant : references
+Message --> MsgType : has type
+
+' External systems integration
+OpenAIHandler --> OpenAI : calls API
+Endpoint --> Konsolex : integrates with
+TelegramBot --> TelegramAPI : sends messages
+
+' Data persistence
+MsgRepo --> DB : persists
+UserRepo --> DB : persists
+ScoreRepo --> DB : persists
+
+@enduml

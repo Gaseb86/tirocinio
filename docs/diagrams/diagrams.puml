@@ -1,0 +1,104 @@
+@startuml Class Diagram
+namespace Models {
+  class User {
+    +userId: string
+    +threadId: string
+    +telegramId: string
+    +lastTimeUsed: number
+  }
+
+  class Message {
+    +id: string
+    +userId: string
+    +text: string
+    +timestamp: number
+    +type: MessageType
+  }
+}
+
+namespace Operations {
+  class UserOperations {
+    +create()
+    +findByTelegramId()
+    +updateLastTimeUsed()
+  }
+
+  class MessageOperations {
+    +create()
+    +findByUserId()
+  }
+
+  class OpenAIOperations {
+    +createReply()
+    +createThread()
+  }
+}
+
+namespace API {
+  class WebServer {
+    +startWebServer()
+    +handleSendMessage()
+    +handleError()
+  }
+}
+
+Models.User ..> Operations.UserOperations
+Models.Message ..> Operations.MessageOperations
+API.WebServer --> Operations.OpenAIOperations
+@enduml
+
+@startuml Sequence Diagram
+actor User
+participant "Web Server" as WS
+participant "User Ops" as UO
+participant "Message Ops" as MO
+participant "OpenAI" as AI
+
+User -> WS: Send Message
+activate WS
+
+WS -> UO: Find/Create User
+activate UO
+UO --> WS: User Data
+deactivate UO
+
+WS -> MO: Create User Message
+activate MO
+MO --> WS: Message Saved
+deactivate MO
+
+WS -> AI: Get Reply
+activate AI
+AI --> WS: GPT Response
+deactivate AI
+
+WS -> MO: Save GPT Message
+activate MO
+MO --> WS: Message Saved
+deactivate MO
+
+WS --> User: Response
+deactivate WS
+@enduml
+
+@startuml Activity Diagram
+start
+:Receive Message Request;
+
+if (Rate Limit OK?) then (yes)
+  :Validate Message;
+  if (Message Valid?) then (yes)
+    :Find/Create User;
+    :Save User Message;
+    :Get GPT Reply;
+    :Save GPT Message;
+    :Return Success;
+  else (no)
+    :Return Validation Error;
+  endif
+else (no)
+  :Return Rate Limit Error;
+endif
+
+stop
+@enduml

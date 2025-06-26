@@ -1,0 +1,35 @@
+@startuml System Overview
+!theme plain
+
+title AI Chat Bot - System Architecture
+
+package "API Layer" {
+  [Express Server]
+  [Rate Limiter]
+  [Message Validator]
+}
+
+package "Business Logic" {
+  [User Operations]
+  [Message Operations]
+  [OpenAI Operations]
+}
+
+database "Data Models" {
+  [User]
+  [Message]
+}
+
+cloud "External Services" {
+  [OpenAI API]
+}
+
+[Express Server] --> [Rate Limiter]
+[Rate Limiter] --> [Message Validator]
+[Message Validator] --> [User Operations]
+[User Operations] --> [OpenAI Operations]
+[OpenAI Operations] --> [OpenAI API]
+[Message Operations] --> [User]
+[Message Operations] --> [Message]
+
+@enduml

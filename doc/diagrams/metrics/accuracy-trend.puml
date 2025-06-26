@@ -1,0 +1,65 @@
+@startuml Accuracy Improvement Trend
+!theme plain
+skinparam backgroundColor white
+
+title Trend di Miglioramento dell'Accuratezza delle Risposte AI
+
+scale 1.2
+
+skinparam rectangle {
+  BackgroundColor white
+  BorderColor black
+}
+
+rectangle {
+  line.color=transparent
+  
+  " " as space
+  
+  rectangle "Mese 1" as M1 {
+    line.color=black
+    label "Accuratezza: 0.76"
+  }
+  
+  rectangle "Mese 2" as M2 {
+    line.color=black
+    label "Accuratezza: 0.82"
+  }
+  
+  rectangle "Mese 3" as M3 {
+    line.color=black
+    label "Accuratezza: 0.87"
+  }
+  
+  rectangle "Mese 4" as M4 {
+    line.color=black
+    label "Accuratezza: 0.91"
+  }
+  
+  rectangle "Future\nProtiezione" as Future {
+    style {
+      BackgroundColor AliceBlue
+      LineStyle.dash
+    }
+    label "Target: 0.95+"
+  }
+}
+
+M1 -[#blue,thickness=2]-> M2
+M2 -[#blue,thickness=2]-> M3
+M3 -[#blue,thickness=2]-> M4
+M4 -[#blue,thickness=2,dashed]-> Future
+
+note bottom of M3
+  Introduzione ottimizzazione
+  parametri e arricchimento
+  knowledge base
+end note
+
+note bottom of M4
+  Implementazione
+  miglioramenti function
+  calling
+end note
+
+@enduml

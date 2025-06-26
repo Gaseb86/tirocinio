@@ -1,0 +1,58 @@
+@startuml KonsolexAI Use Cases
+left to right direction
+skinparam actorStyle awesome
+
+actor "Cliente" as Customer
+actor "Operatore Supporto" as Operator
+actor "Amministratore" as Admin
+actor "Sistema OpenAI" as OpenAI
+
+rectangle "Sistema ChatBot AI" {
+  usecase "Richiedere assistenza tecnica" as UC1
+  usecase "Consultare documentazione" as UC2
+  usecase "Eseguire operazioni tecniche" as UC3
+  usecase "Inviare messaggio" as UC4
+  usecase "Creare ticket di supporto" as UC5
+  usecase "Visualizzare cronologia" as UC6
+  
+  usecase "Gestire ticket" as UC7
+  usecase "Rispondere ai ticket" as UC8
+  usecase "Chiudere ticket" as UC9
+  
+  usecase "Monitorare conversazioni" as UC10
+  usecase "Visualizzare statistiche" as UC11
+  usecase "Configurare sistema" as UC12
+  
+  usecase "Elaborare richieste" as UC13
+  usecase "Fornire risposte" as UC14
+  usecase "Eseguire funzioni" as UC15
+}
+
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC4
+Customer --> UC5
+Customer --> UC6
+
+Operator --> UC7
+Operator --> UC8
+Operator --> UC9
+
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+
+UC1 --> OpenAI
+UC2 --> OpenAI
+UC13 <-- OpenAI
+UC14 <-- OpenAI
+UC15 <-- OpenAI
+
+UC5 ..> UC7 : <<include>>
+UC4 ..> UC13 : <<include>>
+UC8 ..> UC4 : <<include>>
+@enduml

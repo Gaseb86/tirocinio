@@ -1,0 +1,39 @@
+@startuml Automation Success Rates
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName "Arial"
+
+title Tassi di Successo dell'Automazione per Categoria
+
+scale 1.3
+
+skinparam rectangle {
+  BackgroundColor white
+  BorderColor black
+  RoundCorner 20
+}
+
+rectangle "Riavvii Server\n92% automazione" as Restart #CCFFCC
+rectangle "Gestione Domini e DNS\n83% automazione" as DNS #CCFFCC
+rectangle "Configurazione Email\n76% automazione" as Email #CCFFCC
+rectangle "Certificati SSL\n65% automazione" as SSL #FFFFCC
+rectangle "Problemi Container\n70% automazione" as Container #CCFFCC
+
+Restart -[hidden]d-> DNS
+DNS -[hidden]d-> Email
+Email -[hidden]d-> SSL
+SSL -[hidden]d-> Container
+
+note right of Restart
+  **Alto tasso di automazione**:
+  Procedure standardizzate 
+  e ben definite
+end note
+
+note right of SSL
+  **Automazione più bassa**:
+  Maggior variabilità di casi 
+  e scenari complessi
+end note
+
+@enduml

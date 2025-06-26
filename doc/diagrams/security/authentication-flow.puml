@@ -1,0 +1,56 @@
+@startuml Authentication Flow
+
+skinparam backgroundColor white
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "User" as User
+participant "Web Interface\nor Telegram" as UI
+participant "API Gateway" as API
+participant "Authentication\nService" as Auth
+participant "User Repository" as UserRepo
+participant "Protected\nResources" as Resources
+
+title Authentication and Authorization Flow
+
+User -> UI: Request access
+activate UI
+
+UI -> API: Forward request with credentials
+activate API
+
+API -> Auth: Validate credentials
+activate Auth
+
+Auth -> UserRepo: Verify user exists
+activate UserRepo
+UserRepo --> Auth: User information
+deactivate UserRepo
+
+alt Valid credentials
+    Auth --> API: Authentication successful
+    API -> API: Check user permissions
+    
+    alt Has required permissions
+        API -> Resources: Access resource
+        activate Resources
+        Resources --> API: Resource data
+        API --> UI: Return requested data
+        UI --> User: Display data
+        deactivate Resources
+    else Insufficient permissions
+        API --> UI: 403 Forbidden
+        UI --> User: Access denied message
+    end
+    
+else Invalid credentials
+    Auth --> API: Authentication failed
+    API --> UI: 401 Unauthorized
+    UI --> User: Login error message
+end
+
+deactivate Auth
+deactivate API
+deactivate UI
+
+@enduml

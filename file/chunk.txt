@@ -1,0 +1,8 @@
+MAILSERVER.txt: chunk size: 2500, chunk overlap: 600
+SEZIONE-SERVER.txt: chunk size: 2000, chunk overlap: 500
+CONTAINER_WEBSITE.txt: chunk size: 2000, chunk overlap: 500
+WEBSERVER.txt: chunk size: 2000, chunk overlap: 500
+DOMINI.txt: chunk size: 1800, chunk overlap: 400
+MENU_PROFILO.txt: chunk size: 1500, chunk overlap: 300
+ZIMBRA.txt: chunk size: 1500, chunk overlap: 300
+WINDOWS.txt: chunk size: 1000, chunk overlap: 200

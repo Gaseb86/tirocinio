@@ -1,0 +1,46 @@
+@startuml Contextualization Flow Diagram
+
+start
+
+:User sends message;
+
+fork
+  :Extract user context;
+  :Retrieve user profile;
+  :Get services status;
+fork again
+  :Retrieve conversation history;
+  :Load recent messages;
+  :Identify relevant threads;
+fork again
+  :Analyze current request;
+  :Identify intent;
+  :Extract entities;
+end fork
+
+:Build comprehensive context;
+
+:Enrich with knowledge base data;
+note right
+  Find relevant documents 
+  based on semantic search
+end note
+
+:Prepare OpenAI prompt;
+note right
+  Include:
+  - User context
+  - Conversation history
+  - Current request
+  - Knowledge base info
+end note
+
+:Send to OpenAI API;
+
+:Process response;
+
+:Format and deliver to user;
+
+stop
+
+@enduml

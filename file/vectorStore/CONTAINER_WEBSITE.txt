@@ -1,0 +1,149 @@
+// TECNICA-CONTAINER.txt
+[CONTAINER ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per server:
+- CONTAINER
+Se il tuo server non è di questi tipi, consulta il file appropriato.
+
+1. PROBLEMA SERVER CONTAINER
+Caso 1: Server non raggiungibile
+Soluzione 1: Se il server non risulta raggiungibile bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. riavvia il server
+		2. spegni il server e, dopo 2 minuti dallo spegnimento, riaccendilo
+
+2. PROBLEMA SITO WEB SU SERVER CONTAINER
+Caso 1: Problema di visualizzazione di un singolo sito su Server di tipo CONTAINER
+Soluzione 1: Se un solo sito non è visibile bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. Verificare la corretta propagazione dei record DNS. I record necessari per la visualizzazione di un sito sono due: record A dominio.tld e record A www. Per verificare la corretta propagazione si può utilizzare un servizio online come whatsmydns.net oppure effettuare un semplice ping da pc. 
+		2: aumentare le risorse cpu e ram del container web e database dopodichè accendere il container eventualmente spento. Le risorse impostate non vengono allocate ma è semplicemente un limite oltre il quale il container non può andare.
+		3. Verificare i log del sito dalla cartella /log
+		4. Ripristinare i privilegi delle cartelle (se segnalato errore nei log) dall'icona presente nella gestione del container sito web di Konsolex
+Caso 2: Problema di visualizzazione di tutti i siti presenti sul server di tipo CONTAINER
+Soluzione 2: Bisogna porvvedere a fare un riavvio del server
+	NB:Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server.
+Caso 3: Errori di scrittura di file o cartelle per un singolo sito su Server di tipo CONTAINER
+Soluzione 3: Se si riscontrano problemi di scrittura o lettura di file o cartelle procedere al ripristino dei privilegi delle cartelle dall'icona presente nella gestione del container sito web di Konsolex
+Caso 4: Problemi di installazione di un sito web su Server di tipo CONTAINER
+Soluzione4: Se si riscontrano problemi di installazione di un nuovo sito procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. verificare di aver caricato i files nella cartella /html
+		2. cancellare la pagina di default index.php
+		3. verificare di utilizzare, in fase di installazione del sito, il valore DB host presente nella sezione database nella gestione del sito container invece del valore localhost
+		4. Installare eventuali pacchetti mancanti (eempio POD per Prestashop) dall'icona presente nella gestione del container sito web di Konsolex 
+		5. Ripristinare i privilegi dall'icona presente nella gestione del container sito web di Konsolex
+Caso 5: Creazione di un alias o redirect per un sito su Server di tipo CONTAINER
+Soluzione 5: Per creare un alias o redirect di un sito seguire questi passaggi:
+		1.creare il sito e il certificato
+		2. Sovrascrivere il file /html/index.php con questo codice:
+		<!DOCTYPE html> <?php header('Location: http://tuodominioprincipale.tld/'); exit; ?>
+
+3. PROBLEMI DATABASE SU SERVER CONTAINER
+Caso 1: Problema database o mysql su singolo sito su Server di tipo CONTAINER:
+Soluzione 1: Se si riscontrano problemi con il Database durante l'apertura della pagina del sito web (errore connessione al database) bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1: Controllare se il container database è spento.
+		2: Aumentare le risorse ram e cpu del container database
+	NB: Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile aumentare nuovamente le risorse del container database e/o fare un upgrade del server.
+####TIPS: una volta ripristinato il servizio si consiglia di lanciare un azione di riparazione tabelle
+Caso 2: Problema database su tutti i siti di un Server di tipo CONTAINER
+soluzione 2: Se si riscontrano problemi con il servizio Mysql o con il Database durante l'apertura delle pagine web di tutti i siti (errore connessione al database) presenti sul server bisogna procedere al riavvio del server
+NB:Se il problema si risolve ma dovesse ripresentarsi nelle 48 ore successive è consigliabile un upgrade del server.
+
+4. PROBLEMA CERTIFICATO SSL SU SERVER CONTAINER
+Caso 1: Mancata generazione di un certifcato ssl Let's Encrypt su sito su server di tipo CONTAINER
+Soluzione 1: Se il certificato ssl Let's Encrypt non viene generato bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+		1. verificare la creazione dei record A nomedominio.tld e www
+		2. verificare la propagazione dei record A nomedominio.tld e www
+		3. verificare la creazione o propagazione dei record A e WWW degli alias domini (se ci sono degli alias anche questi devono avere i dns configurati correttamente)
+		4. verificare che l'agente sia attivo e aggiornato
+		5. Se è tutto corretto e verificato allora il problema potrebbe essere il superamento dei tentativi giornalieri di richiesta; se si prova ad attivare il certificato troppe volte in un arco di tempo limitato o nelle 24 ore il sistema Let's Encrypt blocca, per 24 ore, ogni nuova richiesta. Attendere 24 ore e riprovare
+	NB: è sempre consigliato, nel caso di modifica dei record, di impostare il TTL a 300 almeno 24 ore prima della richiesta del certificato questo perchè alcuni server potrebbero aggiornare i record dopo 24 ore se il vecchio TTL era impostato a 86400. Se i record sono invece nuovi impostare il TTL a 300 (5 minuti) in fase di creazione dei record.
+####TIPS: la corretta generazione del certificato può essere verificata attraverso il servizio sslshopper.com/ssl-checker.html [è possibile cancellare la cache di sslshopper dal link presente nella pagina]
+
+5.PROBLEMA FTP SU SERVER CONTAINER
+Caso 1: Problema di accesso FTP su un sito su server di tipo CONTAINER
+Soluzione 1: Se si riscontrano problemi di accesso attraverso il software FTP utilizzato bisogna provare a seguire, uno alla volta finchè il problema non è risolto, questi step:
+1. verificare che il nome server sia correttamente puntato come un normale dominio di terzo livello
+2. verificare di utilzzare come host per il collegamento ftp il nome del server
+3. verificare utente e password utilizzate
+4. se possibile utilizzare il servizio file manager all'interno della gestione sito in konsolex
+5. Ricreare l'account FTP
+Caso 2: Se si riscontrano problemi nella creazione di un account FTP su un sito su Server di tipo CONTAINER
+Soluzione 2: Seguire questi passaggi, uno alla volta, finchè il problema non è risolt:
+1. verificare che il nome server sia correttamente puntato come un normale dominio di terzo livello
+2. verificare che l'agente sia collegato e aggiornato
+####TIPS: il servizio FTP è a livello globale del server.
+
+6. PROBLEMA CRONJOB SU SERVER CONTAINER
+Caso 1: Se il comando cronjob su Server di tipo CONTAINER non funziona o ci sono problemi bisogna fare un test per verificare se il servizio sia funzionante.
+Soluzione 1: Per fare questo test bisogna seguire tutti questi passaggi: creare un file `testcron.php` nella cartella `/html` con il seguente codice PHP completo:
+`<?php
+$myfile = fopen("AB_CRON_FILE.txt", "w") or die("Unable to open file!");
+$txt = "CRON FUNZIONA\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+?>`
+una volta creato il file e caricato nella cartella /html creare un cronjob con il comando: `https://nomedeltuodominio.tld/testcron.php`. Nel campo minuti inserisci `*/2` e nei restanti campi `*` per eseguirlo ogni 2 minuti. Dopo circa 2 minuti, verifica che nella cartella /web sia stato creato il file `A_CRON_FILE.txt`.
+Se il file `A_CRON_FILE.txt` è stato creato correttamente, il servizio cronjob sul tuo server funziona perfettamente.
+
+7. PROBLEMA AGENTE SU SERVER CONTAINER
+Caso 1: Se durante l'aggiornamento l'agente torna alla vecchia versione
+Soluzione 1: Bisogna rilanciare l'aggiornamento e appena si visualizza l'agente aggiornato riavviarlo dal tasto riavvia agente.
+Caso 2: L'agente non si avvia o non si aggiorna
+Soluzione 2: Bisogna aprire una segnalazione al supporto di livello 2
+####TIPS: L'agente è necessario per alcune funzionalità e operazioni da effettuare su Konsolex, non averlo installato però non preclude la funzionalità del server e dei servizi.
+
+---GUIDA KONSOLEX---
+Gestione dei siti su Konsolex per i server di tipo CONTAINER
+Guida della sezione ruolo MANAGE CONTAINER su server di tipo CONTAINER del portale Konsolex:
+All'interno troviamo tre sottomenu
+		1. website
+		2. proxy
+		3. container
+	1. SEZIONE WEBSITE:
+Nella sezione website vediamo
+		A. la lista dei nostri siti web con lo stato del sito (online o spento)
+		B. il nome del sito
+		C. il certificato SSL se attivo o non attivo (dunque è possibile attivarlo o disattivarlo)
+		D. la versione PHP che va dalla 5 alla, attualmente, 8.3 ma le nuove versioni vengono sempre implementate
+		E. le performance (utilizzo CPU e RAM) per singolo sito (sono performance differenti da quelle presenti nella sezione specifiche del server. Queste sono, come detto, per singolo sito non globali del server)
+		F. l'icona per l'eliminazione del container (del sito container)
+####TIPS ELIMINAZIONE SITO CONTAINER: l'eliminazione del container website è di due tipi:
+	1. eliminazione che prevede la cancellazione di tutti i dati del sito (quindi non sarà più possibile ripristinare lo stesso). Prima di questa cancellazione si deve eliminare il container database associato al sito e, preferibilmente, disattivare il certificato SSL.
+	2. eliminazione che non prevede la cancellazione di tutti i dati. Questa opzione è da utilizzare per variare la versione php; una volta cancellato in questa modalità sarà possibile ricrearlo andando a scegliere la versione PHP differente rispetto a quella presente prima della cancellazione. Il sito sarà esattamente come prima della cancellazione ma con la versione php aggiornata. 
+--Gestione su Konsolex del sito presente sul server di tipo --
+1.SEZIONE SPECIFICHE
+Qui vediamo immediatamente le due tipologie di container:
+	1. Container web
+	2. Container database
+con il consumo delle risorse cpu e ram per singolo container.
+Operazioni che si possono eseguire sui container web e database:
+		A. riavvio
+		B. spegnimento
+		C. gestione risorse (impostare limiti ram e cpu) 
+Operazioni che si possono eseguire sul solo container web:
+		A. installare dei pacchetti aggiuntivi, come ad esempio, il pacchetto POD per i CMS Prestashop
+		B. eseguire degli script
+		C. fare un ripristino dei privilegi delle cartelle.
+		D. revocare il certificato SSL utile in caso di modifiche da effettuare sul container
+Operazioni che si possono eseguire sul solo container database:
+		A. eseguire una un'operazione di riparazione delle tabelle.
+La sezione successiva
+2. SEZIONE DATABASE
+troviamo i dati del database quindi nome DB, host, user, password, password root, tecnologia database (MariaDb, MySQL, Tomcat etc.) e impostazione accesso remoto (on o off).
+La sezione successiva è 
+3. SEZIONE DATABASE MANAGEMENT
+attiva e installa il servizio Phpmyadmin o il servizio Adminer; a seguito dell'attivazione di uno di questi due servizi è possibile accedere al database attraverso Konsolex. Adminer è da utilizzare per database Tomcat 
+La sezione successiva è 
+4. SEZIONE CRONJOB
+abbiamo la possibilità di creare dei cron job.
+La sezione successiva è
+5. SEZIONE UTENTE FTP
+creazione degli utente FTP.
+La sezione successiva è
+6. SEZIONE FILE MANAGER
+attivando il file manager puoi accedere alla gestione dei file del sito web. E' consigliato utilizzare questa soluzione invece della creazione di un utente FTP.
+La sezione successiva è
+7. SEZIONE BACKUP
+creazione e schedulazione dei backup per il sito web (sia container web che container database)
+####TIPS Server di tipo CONTAINER
+1.DIFFERENZE FILE MANAGER E CREAZIONE UTENTE FTP: Utilizzare il file manager o creare un utente ftp è la stessa cosa ma è altamente consigliato utilizzare il servizio di File Manager invece di creare un utente ftp. Il file manager è molto più completo rispetto a un semplice accesso FTP in quanto: A. l'upload e il download sono molto più veloci B.è presente un editor di testo C.è possibile l'estrazione di cartelle compresse. Inoltre è più sicuro non creando nuove porte di accesso nel proxy come accade per il collegamento via ftp.
+2.PECULIARITA' DI POTER GESTIRE LE RISORSE PER SINGOLO CONTAINER: nei sistemi container ogni container è indipendente dagli altri. Questo significa che se un container web-site o database va offline tutti gli altri siti rimangono online; rispetto ai classici servizi hosting (server di tipo webserver) il server container non andrà offline per un problema su un singolo sito.
+3.CANCELLAZIONE SERVIZI: Quando uno dei servizi tra File Manager, Phpmyadmin, Adminer, Ftp non è più necessario è consigliato eliminarlo per liberare risorse al server e chiudere le porte di accesso. L'eliminazione di questi servizi non cancella alcun dato ed è sempre possibile riattivarli quando necessario.

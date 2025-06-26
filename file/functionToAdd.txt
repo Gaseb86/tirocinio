@@ -1,0 +1,350 @@
+
+
+        "type": "function",
+        "function": {
+            "name": "getServerList",
+            "description": "Returns the list of servers and the type of each server (container-website or webserver-apache). Use this function to verify the correctness of server names provided by the user or to identify if a server is of type container or webserver. It is recommended to call this function during data validation or when it is necessary to classify servers based on their type.",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false,
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "getDomainList",
+            "description": "Returns the list of the user's domains, only used in case of an error. Do not call for SSL-related inquiries.",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false,
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "getSiteList",
+            "description": "Retrieves a list of the user's sites, including the site name and site type (container-site or webserver). This function should always be called to verify the accuracy of site names provided by the user or to determine whether a site, database, or SSL is categorized as a container or a webserver.",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false,
+            }
+        }
+    },
+{
+        "type": "function",
+        "function": {
+            "name": "checkDomainAvailability",
+            "description": "Verifica la disponibilità di un dominio",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "domain": {
+                        "type": "string",
+                        "description": "Nome del dominio da verificare fornito dall'utente. il formato corretto deve essere 'domain' + '.' + 'tld'"
+                    }
+                },
+                "required": ["domain"],
+                "additionalProperties": false
+            }
+        }
+    },
+    
+    
+    {
+        "type": "function",
+        "function": {
+            "name": "restartPostfix",
+            "description": "Riavvia il servizio Postfix sul server",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "serverName": {
+                        "type": "string",
+                        "description": "Nome del server su cui riavviare Postfix"
+                    }
+                },
+                "required": [
+                    "serverName"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "updateAuthinfo",
+            "description": "Aggiorna le informazioni di autenticazione per un dominio, se il dominio non è stato specificato richiedilo all'utente. Se la funzione ritorna true devi dire che l'aggiornamento è stato praso in carico e troverà il nuovo authinfo nella sezione dommini",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "domainName": {
+                        "type": "string",
+                        "description": "Nome del dominio da aggiornare"
+                    }
+                },
+                "required": [
+                    "domainName"
+                ],
+                "additionalProperties": false
+            }
+
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "modifyDns",
+            "description": "Modifica un record DNS esistente",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "description": "Nome del record DNS da modificare"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Tipo di record DNS (A, CNAME, MX, etc.)"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Nome del record"
+                    },
+                    "data": {
+                        "type": "string",
+                        "description": "Valore del record"
+                    },
+                    "ispId": {
+                        "type": "number",
+                        "description": "ID del provider DNS"
+                    },
+                    "ttl": {
+                        "type": "number",
+                        "description": "Time To Live del record"
+                    },
+                    "priority": {
+                        "type": "number",
+                        "description": "Priorità del record (usato per MX)"
+                    }
+                },
+                "required": ["id", "type", "name", "data", "ispId", "ttl", "priority"],
+                "additionalProperties": false
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "addDns",
+            "description": "Aggiunge un nuovo record DNS",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Tipo di record DNS (A, CNAME, MX, etc.)"
+                    },
+                    "zoneId": {
+                        "type": "number",
+                        "description": "ID della zona DNS"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Nome del record"
+                    },
+                    "data": {
+                        "type": "string",
+                        "description": "Valore del record"
+                    },
+                    "ispId": {
+                        "type": "number",
+                        "description": "ID del provider DNS"
+                    },
+                    "ttl": {
+                        "type": "number",
+                        "description": "Time To Live del record"
+                    },
+                    "priority": {
+                        "type": "number",
+                        "description": "Priorità del record (usato per MX)"
+                    }
+                },
+                "required": ["type", "zoneId", "name", "data", "ispId", "ttl", "priority"],
+                "additionalProperties": false
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "modifyRdns",
+            "description": "Modifica il record DNS",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "description": "ID del server (campo 'id' nel servers)"
+                    },
+                    "ip": {
+                        "type": "string",
+                        "description": "Indirizzo IP (da chiedere all'utente)"
+                    },
+                    "dns_ptr": {
+                        "type": "string",
+                        "description": "Record PTR da impostare (da chiedere all'utente)"
+                    }
+                },
+                "required": [
+                    "id",
+                    "ip",
+                    "dns_ptr"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "siteWebRamCpuMemoryImprove",
+            "description": "Modifica le risorse CPU e memoria di un sito, chiendi sempre all'utente: nome del sito, valore CPU e valore memoria. Se la funzione ritorna true devi dire che l'aggiornamento è stato preso in carico e troverai i nuovi valori nella sezione website",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "siteName": {
+                        "type": "string",
+                        "description": "Nome del sito su cui modificare le risorse"
+                    },
+                    "cpu": {
+                        "type": "string",
+                        "description": "Valore CPU da assegnare, il valore deve essere tipo '0.1'"
+                    },
+                    "memory": {
+                        "type": "string",
+                        "description": "Valore memoria da assegnare, il valore deve essere tipo '100m'"
+                    }
+                },
+                "required": [
+                    "siteName",
+                    "cpu",
+                    "memory"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "siteDbRamCpuMemoryImprove",
+            "description": "Modifica le risorse CPU e memoria di un database, chiendi sempre all'utente: nome del sito, valore CPU e valore memoria. Se la funzione ritorna true devi dire che l'aggiornamento è stato preso in carico e troverai i nuovi valori nella sezione website",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "siteName": {
+                        "type": "string",
+                        "description": "Nome del sito su cui modificare le risorse"
+                    },
+                    "cpu": {
+                        "type": "string",
+                        "description": "Valore CPU da assegnare, il valore deve essere tipo '0.1'"
+                    },
+                    "memory": {
+                        "type": "string",
+                        "description": "Valore memoria da assegnare, il valore deve essere tipo '100m'"
+                    }
+                },
+                "required": [
+                    "siteName",
+                    "cpu",
+                    "memory"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    
+    {
+        "type": "function",
+        "function": {
+            "name": "restartWebContainer",
+            "description": "Riavvia il container web, chiedi sempre il nome del sito all'utente",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "siteName": {
+                        "type": "string",
+                        "description": "Nome del sito su cui riavviare il container web"
+                    }
+                },
+                "required": [
+                    "siteName"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+   
+    {
+        "type": "function",
+        "function": {
+            "name": "openTicket",
+            "description": "Apre un ticket per il supporto tecnico, apri solo con risposta affermativa dell'utente",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "TicketMessage": {
+                        "type": "string",
+                        "description": "Il messaggio da includere nel ticket"
+                    }
+                },
+                "required": [
+                    "TicketMessage"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+
+//////////////// NON SERVONO PER IL MOMENTO ////////////////
+    {
+        "type": "function",
+        "function": {
+            "name": "restartDbContainer",
+            "description": "Riavvia il container database di un sito su server container-website o su un sito container-site, chiedi sempre il nome del sito all'utente, se fallisce chiama la funzione getSiteList per avere la lista dei siti e confrontarla con il nome fornito dall'utente. Prima di chiamare questa funzione: 1. chiedi sempre all'utente se è sicuro di voler riavviare il database; 2. Fornisci all'utente tutta la procedurea per risolvere il problema.",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "siteName": {
+                        "type": "string",
+                        "description": "Nome del sito su cui riavviare il container database, chiedi sempre all'utente il nome del sito"
+                    }
+                },
+                "required": [
+                    "siteName"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },

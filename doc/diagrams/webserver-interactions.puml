@@ -1,0 +1,75 @@
+@startuml
+skinparam componentStyle uml2
+skinparam backgroundColor white
+
+[WebServer] as WS
+[OpenAIHandler] as OAI
+[MessageRepository] as MR
+[UserRepository] as UR
+[TicketSystem] as TS
+[KonsolexAPI] as KAPI
+[TelegramBot] as TB
+[EndpointHandler] as EH
+database "MySQL\nDatabase" as DB
+
+' WebServer -> Repositories
+WS --> MR : gestisce messaggi
+note right on link
+  - Crea messaggi
+  - Recupera storico
+  - Aggiorna stati ticket
+end note
+
+WS --> UR : gestisce utenti
+note right on link
+  - Trova utenti
+  - Crea nuovi utenti
+  - Aggiorna thread
+end note
+
+' WebServer -> APIs
+WS --> KAPI : integrazione piattaforma
+note right on link
+  - Aggiorna stati
+  - Notifica eventi
+  - Sincronizza dati
+end note
+
+' WebServer -> OpenAI
+WS --> OAI : processa richieste
+note right on link
+  - Genera risposte AI
+  - Gestisce thread
+  - Esegue funzioni
+end note
+
+' WebServer -> TicketSystem
+WS --> TS : gestisce tickets
+note right on link
+  - Crea tickets
+  - Aggiorna stati
+  - Gestisce risposte
+end note
+
+' WebServer -> TelegramBot
+WS <-- TB : riceve richieste
+note right on link
+  - Processa messaggi
+  - Gestisce callback
+  - Invia notifiche
+end note
+
+' WebServer -> EndpointHandler
+WS --> EH : operazioni sistema
+note right on link
+  - Restart server
+  - Gestione domini
+  - Operazioni DNS
+  - Gestione container
+end note
+
+' Repositories -> Database
+MR --> DB : persiste dati
+UR --> DB : persiste dati
+
+@enduml

@@ -1,0 +1,111 @@
+@startuml Hybrid Architecture
+
+!define RECTANGLE class
+
+skinparam backgroundColor white
+skinparam classFontSize 14
+skinparam classFontName Arial
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam arrowColor black
+skinparam stereotypeCBackgroundColor #A9DCDF
+
+title "Architettura Ibrida Proposta per Sviluppi Futuri"
+
+package "Client Interfaces" {
+  class "Web Interface" as Web
+  class "Telegram Bot" as Telegram
+  class "Mobile App" as Mobile
+}
+
+package "API Gateway" {
+  class "Load Balancer" as LB
+  class "API Router" as Router
+  class "Authentication" as Auth
+}
+
+package "Core Services" {
+  class "Message Orchestrator" as Orchestrator
+  class "Context Manager" as Context
+  class "Ticket Manager" as Ticket
+}
+
+package "AI Processing Layer" {
+  class "Request Classifier" as Classifier
+  
+  package "Model Selection" {
+    class "Simple Queries\n(Local Model)" as LocalModel
+    class "Complex Queries\n(Cloud Model)" as CloudModel
+  }
+  
+  class "Function Dispatcher" as Dispatcher
+}
+
+package "Vector Storage" {
+  class "Document Indexer" as Indexer
+  class "Knowledge Base" as KB
+  class "Feedback Loop" as Feedback
+}
+
+package "External Services" {
+  class "OpenAI API" as OpenAI
+  class "Konsolex API" as Konsolex
+  class "Other Services" as Others
+}
+
+' Client connections
+Web --> LB
+Telegram --> LB
+Mobile --> LB
+
+' Gateway flow
+LB --> Router
+Router --> Auth
+Auth --> Orchestrator
+
+' Core service connections
+Orchestrator --> Context
+Orchestrator --> Ticket
+Orchestrator --> Classifier
+
+' AI layer connections
+Classifier --> LocalModel : "Simple\nqueries"
+Classifier --> CloudModel : "Complex\nqueries"
+LocalModel --> Dispatcher
+CloudModel --> Dispatcher
+Dispatcher --> Orchestrator : "Results"
+
+' Knowledge connections
+LocalModel --> KB
+CloudModel --> KB
+KB --> Indexer
+Feedback --> KB : "Continuous\nimprovement"
+Orchestrator --> Feedback : "User\ninteractions"
+
+' External connections
+CloudModel --> OpenAI : "Complex\nreasoning"
+Dispatcher --> Konsolex : "Technical\noperations"
+Dispatcher --> Others : "Other\nservices"
+
+note right of LocalModel
+  Modello lightweight 
+  ospitato localmente per:
+  - Query frequenti
+  - Bassa latenza
+  - Operazioni offline
+end note
+
+note right of CloudModel
+  Modello avanzato su cloud per:
+  - Query complesse
+  - Ragionamento sofisticato
+  - Alta qualità di risposta
+end note
+
+note bottom of Feedback
+  Meccanismo di apprendimento 
+  continuo basato su interazioni
+  utente e risultati delle operazioni
+end note
+
+@enduml

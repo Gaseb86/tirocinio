@@ -1,0 +1,83 @@
+@startuml Conversation Sequence Diagram
+
+actor User
+participant "Telegram Bot" as TgBot
+participant "Message Handler" as Handler
+participant "User Repository" as UserRepo
+participant "Message Repository" as MsgRepo
+participant "OpenAI Handler" as OpenAI
+participant "OpenAI API" as API
+participant "Function Manager" as Functions
+participant "Konsolex API" as Konsolex
+
+User -> TgBot: Send message
+activate TgBot
+
+TgBot -> Handler: Process message
+activate Handler
+
+Handler -> UserRepo: getUserOrCreate()
+activate UserRepo
+UserRepo -> OpenAI: Create thread if new user
+OpenAI -> API: Create thread
+API --> OpenAI: Thread ID
+OpenAI --> UserRepo: Thread created
+UserRepo --> Handler: User object
+deactivate UserRepo
+
+Handler -> MsgRepo: createUserMessage()
+activate MsgRepo
+MsgRepo --> Handler: Message stored
+deactivate MsgRepo
+
+Handler -> OpenAI: createReply()
+activate OpenAI
+
+OpenAI -> API: Add message to thread
+API --> OpenAI: Confirm
+
+OpenAI -> API: Create run with tools
+API --> OpenAI: Run created
+
+loop Until run completes
+  OpenAI -> API: Check run status
+  API --> OpenAI: Status update
+  
+  alt Run requires tool calls
+    API --> OpenAI: Tool calls requested
+    
+    OpenAI -> Functions: handleToolCalls()
+    activate Functions
+    
+    Functions -> Functions: executeTool()
+    
+    alt Technical operation
+      Functions -> Konsolex: API request
+      Konsolex --> Functions: Operation result
+    end
+    
+    Functions --> OpenAI: Tool outputs
+    deactivate Functions
+    
+    OpenAI -> API: Submit tool outputs
+    API --> OpenAI: Run updated
+  end
+end
+
+API --> OpenAI: Final response
+OpenAI --> Handler: Formatted reply
+deactivate OpenAI
+
+Handler -> MsgRepo: createGptMessage()
+activate MsgRepo
+MsgRepo --> Handler: AI message stored
+deactivate MsgRepo
+
+Handler -> Konsolex: Notify message update
+Handler --> TgBot: Response ready
+deactivate Handler
+
+TgBot --> User: Display response
+deactivate TgBot
+
+@enduml

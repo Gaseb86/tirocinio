@@ -1,0 +1,65 @@
+@startuml Deployment Diagram
+
+skinparam linetype ortho
+
+node "Application Server" as AppServer {
+  artifact "Node.js Application" as NodeApp {
+    component TelegramBot
+    component WebServer
+    component OpenAIHandler
+    component EndpointHandler
+  }
+  artifact "pm2 Process Manager" as PM2
+}
+
+node "Database Server" as DBServer {
+  database "MySQL Database" as MySQL {
+    frame "Users Table"
+    frame "Messages Table"
+    frame "Assistants Table"
+    frame "Scores Table"
+  }
+}
+
+cloud "OpenAI Cloud" as OpenAICloud {
+  component "GPT-4 API" as GPT4
+  component "Embeddings API" as Embeddings
+  component "Assistants API" as AssistantsAPI
+}
+
+cloud "Telegram Cloud" as TelegramCloud {
+  component "Bot API" as TelegramAPI
+}
+
+cloud "Konsolex Platform" as KonsolexCloud {
+  component "Auth API" as KonsolexAuth
+  component "Domains API" as KonsolexDomains
+  component "Servers API" as KonsolexServers
+  component "Containers API" as KonsolexContainers
+}
+
+node "Client Devices" as Clients {
+  component "Telegram Client" as TelegramClient
+  component "Web Browser" as Browser
+}
+
+' Connections between components
+Clients -- TelegramCloud : HTTPS
+Clients -- AppServer : HTTPS
+
+AppServer -- DBServer : TCP/IP
+AppServer -- OpenAICloud : HTTPS
+AppServer -- TelegramCloud : HTTPS
+AppServer -- KonsolexCloud : HTTPS
+
+' Internal connections
+TelegramBot -- TelegramAPI
+WebServer -- Browser
+OpenAIHandler -- GPT4
+OpenAIHandler -- AssistantsAPI
+EndpointHandler -- KonsolexAuth
+EndpointHandler -- KonsolexDomains
+EndpointHandler -- KonsolexServers
+EndpointHandler -- KonsolexContainers
+
+@enduml

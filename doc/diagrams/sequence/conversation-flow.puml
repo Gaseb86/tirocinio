@@ -1,0 +1,73 @@
+@startuml Conversation Flow
+actor Cliente
+participant "Telegram Bot" as Bot
+participant "Web Server" as Server
+participant "OpenAI Handler" as AI
+participant "Repository" as Repo
+participant "OpenAI API" as OpenAI
+
+Cliente -> Bot: Invia messaggio
+activate Bot
+Bot -> Server: Inoltra messaggio
+activate Server
+Server -> Repo: getUserOrCreate()
+activate Repo
+Repo --> Server: Profilo utente
+deactivate Repo
+
+Server -> Repo: createUserMessage()
+activate Repo
+Repo --> Server: Messaggio salvato
+deactivate Repo
+
+Server -> AI: createReply(user, message)
+activate AI
+AI -> OpenAI: Crea messaggio in thread
+activate OpenAI
+OpenAI --> AI: Conferma
+deactivate OpenAI
+
+AI -> OpenAI: Crea run con configurazione
+activate OpenAI
+OpenAI --> AI: Run creato
+deactivate OpenAI
+
+AI -> OpenAI: Polling stato run
+activate OpenAI
+OpenAI --> AI: Stato aggiornato
+deactivate OpenAI
+
+alt Necessita funzioni
+    AI -> OpenAI: handleToolCalls()
+    activate OpenAI
+    OpenAI --> AI: Richiesta funzione
+    deactivate OpenAI
+    
+    AI -> AI: executeTool()
+    AI -> OpenAI: Invia risultato funzione
+    activate OpenAI
+    OpenAI --> AI: Conferma
+    deactivate OpenAI
+end
+
+AI -> OpenAI: Recupera messaggio risposta
+activate OpenAI
+OpenAI --> AI: Contenuto risposta
+deactivate OpenAI
+
+AI -> AI: Formatta risposta
+AI --> Server: Risposta AI
+deactivate AI
+
+Server -> Repo: createGptMessage()
+activate Repo
+Repo --> Server: Messaggio salvato
+deactivate Repo
+
+Server -> Konsolex: Notifica aggiornamenti
+Server --> Bot: Risposta formattata
+deactivate Server
+
+Bot -> Cliente: Mostra risposta
+deactivate Bot
+@enduml

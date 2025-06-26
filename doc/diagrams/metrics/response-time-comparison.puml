@@ -1,0 +1,64 @@
+@startuml Response Time Comparison
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName "Arial"
+
+title Confronto Tempi di Risposta Prima e Dopo Implementazione AI
+
+skinparam BoxPadding 10
+
+scale 1.2
+
+rectangle "Prima dell'Implementazione AI" as Before {
+  card "Tempo Prima Risposta" as BeforeInitial {
+    label "4.7 ore"
+  }
+  card "Tempo Risoluzione\nProblemi Semplici" as BeforeSimple {
+    label "8.2 ore"
+  }
+  card "Tempo Risoluzione\nProblemi Complessi" as BeforeComplex {
+    label "24+ ore"
+  }
+  card "Disponibilità" as BeforeAvail {
+    label "8:30-18:00\nGiorni Lavorativi"
+  }
+}
+
+rectangle "Dopo Implementazione AI" as After {
+  card "Tempo Prima Risposta" as AfterInitial {
+    label "<2 secondi"
+    style {
+      BackgroundColor lightgreen
+    }
+  }
+  card "Tempo Risoluzione\nProblemi Automatizzati" as AfterAuto {
+    label "2.3 minuti"
+    style {
+      BackgroundColor lightgreen
+    }
+  }
+  card "Tempo Risoluzione\nProblemi Escalati" as AfterEscal {
+    label "4.1 ore"
+    style {
+      BackgroundColor lightgreen
+    }
+  }
+  card "Disponibilità" as AfterAvail {
+    label "24/7\n365 giorni"
+    style {
+      BackgroundColor lightgreen
+    }
+  }
+}
+
+Before -[hidden]- After
+
+note bottom of After
+  **Miglioramenti**:
+  - Tempo prima risposta: riduzione del 99.99%
+  - Risoluzione problemi semplici: riduzione del 99.5%
+  - Risoluzione problemi complessi: riduzione del 83%
+  - Disponibilità: aumento del 400%
+end note
+
+@enduml

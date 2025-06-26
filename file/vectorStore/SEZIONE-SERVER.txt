@@ -1,0 +1,57 @@
+SEZIONE SERVER SU KONSOLEX
+
+Nella sezione server di Konsolex abbiamo la lista di tutti i server a nostra disposizione, attivi o scaduti; possiamo vedere a colpo d'occhio:
+ la tipologia (I TIPI DI SERVER SONO: container website, custom, webserver-apache, webserver-nginx, webserver, windows, mailserver, zimbra)
+ Il taglio del server
+ il provider
+ l'ubicazione.
+ le performance (utilizzo della CPU, della RAM e del disco)
+ l'indirizzo IP dedicato
+I server non possono essere cancellati manualmente dal cliente. Se non si vuole più utilizzare va semplicemente tolto l'autorinnovo dalla sezione I MIEI SERVIZI di Konsolex
+Per tutte le tipologie di server avremo le stesse sezioni tranne la sezione RUOLI che è diversa per ogni tipologia di server. Entrando nella gestione del server avremo, come prima schermata, nella SEZIONE SPECIFICHE, tutto quello che riguarda i server e le varie operazioni che si possono fare.
+	1. SEZIONE SPEFICIHE (valida per tutti i tipi di server)
+Come è composta questa sezione:
+A.visualizzazione delle risorse utilizzate (CPU RAM e disco) dal server
+B.visualizzazione dell'agente (dove è possibile sia aggiornarlo sia riavviarlo)
+####TIPS AGENTE: L'agente è importante averlo sempre attivo e aggiornato perché questo permette di effettuare delle operazioni, su Konsolex, che altrimenti non potrebbero funzionare correttamente; inoltre ci permette di visualizzare le risorse utilizzate dal server e i servizi utilizzati dal server (nella SEZIONE SERVIZI del server). Pur non essendo fondamentale per il corretto funzionamento del server [anche senza agente il server funziona] è utile averlo attivo e aggiornato.
+C. accesso remote desktop (VNC)
+D. montaggio ISO
+E. Opzione Business Continuity (viene data la possibilità di avere una ridondanza del server su più datacenter)
+F. Opzione Protezione Server (finché è abilitata la protezione del server non sarà possibile effettuare il rebuild del server e il ripristino del server da un backup o da una snapshot)
+G. Riavvio server
+H. Power Reset server (spegnimento e/o accensione server)
+I. modifica reverse DNS (detto anche Rdns) che deve essere uguale, per forza, al nome del server.
+L. Creazione nuovo server
+M. Disabilitazione Management Server: attivando il server unmanagement si perde il servizio di server management e dunque tutti i futuri interventi richiesti saranno a pagamento a meno che non siano dovuti a problemi del datacenter.
+####TIPS CREAZIONE SERVER: Quando si crea un server va sempre ricordato che il nome da dare al server deve essere sempre un dominio di terzo livello, ad esempio srv.miodominio.tld e che il nome sia puntato correttamente come un normale dominio di terzo livello.
+La sezione successiva, all'interno della gestione del server:
+	2. SEZIONE SERVIZI (non presente nei server di tipo Zimbra e Custom)
+Troviamo l'elenco dei servizi presenti sul server che variano in base alla tipologia di server. Possono essere ad esempio SSH, MySQL, Postfix etc,. Per alcuni servizi è possibile trovare opzioni del tipo riavvio, log o opzioni specifiche. Se un servizio risulta spento ma il sito o le email funzionano bisogna verificare che l'agente sia attivo e aggiornato.
+La sezione successiva è:
+	3. SEZIONE BACKUP
+Troviamo la lista dei backup del server che vengono generati automaticamente ogni giorno. E' un backup dell'intero server. Dal backup è possibile creare delle snapshot, fare un rebuild del server, creare dei nuovi server. Le copie dei backup possono essere massimo 7 (retention di 7 giorni) ed è possibile crearlo anche manualmente.
+La sezione successiva è:
+	4. SEZIONE UPGRADE
+Da qui possiamo fare un upgrade del server, l'upgrade permette di incrementare le risorse in caso di necessità (cpu,ram e disco). L'upgrade, in base al provider utilizzato, può essere un upgrade temporaneo o definitivo. Se il provider prevede l'upgrade temporaneo è possibile aumentare soltanto la CPU e la RAM e lasciare invariato il disco; in questo caso sarà possibile fare un downgrade per tornare alla versione precedente del server prima dell'upgrade. Se viene fatto un upgrade non temporaneo, quindi incrementando cpu, ram e disco, non sarà possibile fare il downgrade. Quando andremo a scegliere il taglio server per l'upgrade tutti quelli che si vedono in lista sono selezionabili salvo problemi del provider scelto.
+La sezione successiva è:
+	5. SEZIONE REBUILD:
+Il Rebuild da la possibilità di andare a ricreare completamente da zero un nuovo server cancellando definitivamente tutti i dati all'interno, mantenendo però lo stesso nome è lo stesso IP dedicato del server.
+####TIPS SERVER: 
+1. Cancellazione Server: I server non si possono elimianre manualmente. Dalla sezione I MIEI SERVIZI si può disattivare il rinnovo automatico. Alla scadenza il servizio non sarà rinnovato e successivamente sarà eliminato, definitivamente, con tutti i dati al suo interno.
+2. Upgrade Server: I tagli presenti durante l'upgrade sono selezionabili. In caso di problemi o errori in fase di upgrade aprire una segnalazione al supporto di livello 2
+3. Accesso SSH: Se viene fornito l'accesso SSH decade il servizio di Server Management e tutti le funzionalità presenti su Konsolex inerente alla gestione dei servizi (siti, email, container etc.) Rimane invariata la gestione del server (upgrade, backup, riavvio, vnc etc.)
+4. Record Rdns: La modifca del record Rdns (reverse dns) deve sempre essere effettuata e deve coincidere con il nome del server opportunamente configurato nelle zone dns del dominio
+5. Server di tipo CUSTOM: Ha disabilitate le funzioni di gestione dei servizi da Konsolex inerente alla gestione dei servizi (siti, email, container etc.) Rimane invariata la gestione del server (upgrade, backup, riavvio, vnc etc.). 
+
+PROBLEMI SERVER GENERICI:
+Caso 1: A seguito di un riavvio il server è offline
+Soluzione 1: Annulla se presente l'operazione dalla coda lavori nella sezione Server di Konsolex. Ora segui questi passaggi:
+	1 Riavviare nuovamente il server
+	2. Se non risulta ancora online prova a spegnere e, dopo 3 minuti, riaccendere il server.
+	3. Se visualizzi un errore o il server è in stato Spento prova ugualmente ad accedere al servizio (esempio un sito web o webmail) per verificare che non sia solo un problema di visualizzazione sul portale.
+Nel caso fosse un problema di visualizzazione prima aggiorna la pagina successivamente puoi richiedermi l'apertura di un ticket al supporto di livello 2
+Caso 2: Il server non è raggiungibile
+Soluzione 2:: Se il server non è raggiungibile verifica che sia attivo e non scaduto. Se attivo allora:
+	1.Riavvia il server
+	2. Se dopo il riavvio non è ancora raggiungibile spegni e, trascorsi almeno 3 minuti, accendi il server
+	3. Se il problema persiste puoi richiedermi l'apertura di un ticket al supporto di livello 2

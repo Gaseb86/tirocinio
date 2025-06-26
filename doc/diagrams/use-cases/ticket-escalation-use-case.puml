@@ -1,0 +1,46 @@
+@startuml Ticket Escalation Use Case
+left to right direction
+skinparam actorStyle awesome
+
+actor "Cliente" as Customer
+actor "Operatore Supporto" as Operator
+actor "Sistema OpenAI" as OpenAI
+
+rectangle "Sistema ChatBot AI" {
+  usecase "Presentare problema complesso" as UC1
+  usecase "Analizzare complessità" as UC2
+  usecase "Identificare necessità escalation" as UC3
+  usecase "Creare ticket supporto" as UC4
+  usecase "Notificare operatori" as UC5
+  usecase "Informare cliente" as UC6
+  usecase "Fornire contesto completo" as UC7
+  usecase "Rispondere al ticket" as UC8
+}
+
+Customer --> UC1
+UC1 --> UC2
+UC2 --> OpenAI : richiede analisi
+OpenAI --> UC3 : valuta complessità
+UC3 --> UC4 : se necessario
+UC4 --> UC5 : notifica amministratori
+UC4 --> UC6 : conferma apertura ticket
+UC5 --> UC7 : fornisce cronologia
+UC7 --> Operator : mostra contesto completo
+Operator --> UC8 : formula risposta
+UC8 --> Customer : invia risposta
+
+note right of UC4
+  Implementato in endpoint.ts tramite
+  la funzione sendMessageToAdmin
+end note
+
+note bottom of UC5
+  Utilizza TelegramAdminIdArray 
+  definito in constants.ts
+end note
+
+note bottom of UC8
+  Implementato tramite l'endpoint
+  ADMIN_REPLY_TICKET in web-server.ts
+end note
+@enduml

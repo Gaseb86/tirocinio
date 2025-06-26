@@ -1,0 +1,45 @@
+@startuml Pre-Post Implementation Performance
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName "Arial"
+
+title Performance Pre vs Post Implementazione
+
+scale 1.2
+
+skinparam rectangle {
+  roundCorner 25
+}
+
+rectangle "Prima dell'IA" as Before {
+  rectangle "Tempo Risposta\n4.7h" as BR1 #FFCCCC
+  rectangle "Disponibilità\n40h/settimana" as BR2 #FFCCCC
+  rectangle "Automazione\n0%" as BR3 #FFCCCC
+  rectangle "Risoluzione\nPrima Chiamata\n45%" as BR4 #FFCCCC
+}
+
+rectangle "Dopo Implementazione IA" as After {
+  rectangle "Tempo Risposta\n<2s" as AR1 #CCFFCC
+  rectangle "Disponibilità\n168h/settimana" as AR2 #CCFFCC
+  rectangle "Automazione\n78%" as AR3 #CCFFCC
+  rectangle "Risoluzione\nPrima Chiamata\n89%" as AR4 #CCFFCC
+}
+
+BR1 -[hidden]d-> BR2
+BR2 -[hidden]d-> BR3
+BR3 -[hidden]d-> BR4
+
+AR1 -[hidden]d-> AR2
+AR2 -[hidden]d-> AR3
+AR3 -[hidden]d-> AR4
+
+Before -[hidden]r-> After
+
+note bottom of After
+  **Impatto Complessivo**:
+  - Significativo miglioramento in tutti i KPI
+  - Riduzione dell'83% nel carico di lavoro del team di supporto
+  - Aumento del 320% nella disponibilità settimanale
+end note
+
+@enduml

@@ -1,0 +1,62 @@
+@startuml Message Processing Activity Diagram
+
+start
+
+:Receive user message;
+:Authenticate user;
+
+if (First time user?) then (yes)
+  :Create new OpenAI thread;
+  :Initialize user profile;
+else (no)
+  :Load existing thread;
+endif
+
+:Store user message in database;
+
+:Add message to OpenAI thread;
+:Create run with function definitions;
+
+repeat
+  :Check run status;
+  
+  if (Status is "requires_action"?) then (yes)
+    :Parse required actions;
+    
+    :Execute requested functions;
+    
+    if (External API required?) then (yes)
+      :Call Konsolex API;
+      :Process API response;
+    endif
+    
+    :Submit results to OpenAI;
+  else if (Status is "failed"?) then (yes)
+    :Log error;
+    :Prepare fallback response;
+    stop
+  endif
+  
+repeat while (Status not "completed") is (true)
+
+:Retrieve AI response;
+
+:Format response for readability;
+
+if (Response indicates escalation needed?) then (yes)
+  :Create support ticket;
+  :Notify administrators;
+else (no)
+  if (Response contains technical instructions?) then (yes)
+    :Format with special highlighting;
+  endif
+endif
+
+:Store AI response in database;
+
+:Send response to user;
+:Update conversation metrics;
+
+stop
+
+@enduml

@@ -1,0 +1,6 @@
+[
+    {
+        "Problema" : "database",
+        "Risposta": "Chiedi all'utente se il problema riguarda tutto il server o un singolo sito, richiedi il nome del server in modo da sapre che tipologia di server è."
+    }
+]

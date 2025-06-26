@@ -1,0 +1,42 @@
+@startuml Server Management Use Case
+left to right direction
+skinparam actorStyle awesome
+
+actor "Cliente" as Customer
+actor "Sistema OpenAI" as OpenAI
+actor "API Konsolex" as KonsolexAPI
+
+rectangle "Sistema ChatBot AI" {
+  usecase "Segnalare problema server" as UC1
+  usecase "Analizzare richiesta" as UC2
+  usecase "Identificare soluzione" as UC3
+  usecase "Suggerire riavvio" as UC4
+  usecase "Eseguire riavvio server" as UC5
+  usecase "Riavviare servizio specifico" as UC6
+  usecase "Notificare risultato" as UC7
+}
+
+Customer --> UC1
+UC1 --> UC2
+UC2 --> OpenAI : richiede analisi
+OpenAI --> UC3 : propone soluzione
+UC3 --> UC4 : se appropriato
+UC4 --> Customer : chiede conferma
+Customer --> UC5 : conferma
+UC5 --> KonsolexAPI : invoca API
+KonsolexAPI --> UC7 : ritorna risultato
+UC7 --> Customer : comunica esito
+
+UC3 ..> UC6 : alternativa
+UC6 --> KonsolexAPI : invoca API specifica
+
+note right of UC5
+  Implementato in endpoint.ts
+  tramite la funzione restartServer
+end note
+
+note right of UC6
+  Implementato in endpoint.ts
+  tramite la funzione restartMysqlOrPostfix
+end note
+@enduml

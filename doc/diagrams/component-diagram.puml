@@ -1,0 +1,87 @@
+@startuml System-Architecture-Components
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam arrowColor #333333
+skinparam componentBorderColor #666666
+skinparam packageBorderColor #AAAAAA
+
+!define PRIMARY #4285F4
+!define SECONDARY #34A853
+!define ACCENT #FBBC05
+!define CRITICAL #EA4335
+
+package "Konsolex AI Chatbot System" {
+  package "Core Services" {
+    [Web Server\nExpress.js] as WebServer #PRIMARY
+    [Telegram Bot\nTelegraf] as TelegramBot #PRIMARY
+    [OpenAI Handler\nGPT-4] as OpenAIHandler #PRIMARY
+    [Ticket System] as TicketSystem #SECONDARY
+  }
+
+  package "Data Layer" {
+    database "MySQL Database" as DB #ACCENT {
+      [User Repository] as UserRepo
+      [Message Repository] as MsgRepo
+      [Score Repository] as ScoreRepo
+    }
+    
+    folder "Knowledge Base" as KnowledgeBase #ACCENT {
+      [Vector Store] as VectorStore
+      [File Storage] as FileStorage
+    }
+  }
+
+  package "External Integration" as ExtInt {
+    [Endpoint Handler] as EndpointHandler
+    [Authentication] as Auth
+  }
+
+  package "Utility Services" {
+    [Environment Config] as EnvConfig
+    [Constants] as Constants
+    [Auxiliary Functions] as AuxFunc
+    [OpenAI Tools] as OpenAITools
+  }
+
+  cloud "External Services" {
+    [OpenAI API] as OpenAI #CRITICAL
+    [Telegram API] as TelegramAPI #CRITICAL
+    [Konsolex Platform API] as KonsolexAPI #CRITICAL
+  }
+}
+
+' Core flow relationships
+WebServer -down-> UserRepo : user management
+WebServer -down-> MsgRepo : message operations
+WebServer -down-> ScoreRepo : relevance tracking
+WebServer -right-> TelegramBot : initializes
+WebServer -left-> OpenAIHandler : delegates AI requests
+WebServer -down-> TicketSystem : routes tickets
+WebServer -down-> EndpointHandler : external operations
+
+' External system communications
+OpenAIHandler -up-> OpenAI : API calls
+TelegramBot -up-> TelegramAPI : sends messages
+EndpointHandler -up-> KonsolexAPI : platform operations
+
+' Data access relationships
+OpenAIHandler -down-> VectorStore : semantic search
+OpenAIHandler -down-> UserRepo : thread management
+OpenAIHandler -down-> MsgRepo : response storage
+
+' Support relationships
+OpenAIHandler -right-> OpenAITools : function calls
+TicketSystem -down-> MsgRepo : ticket tracking
+TelegramBot -down-> Constants : command definitions
+EndpointHandler -down-> EnvConfig : API configuration
+Auth -down-> UserRepo : validation
+WebServer -right-> AuxFunc : utility methods
+
+' Additional relationships
+TelegramBot -down-> EndpointHandler : user validation
+TicketSystem -right-> EndpointHandler : notifications
+
+@enduml

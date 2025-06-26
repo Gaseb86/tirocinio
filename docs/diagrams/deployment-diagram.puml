@@ -1,0 +1,23 @@
+@startuml Deployment Diagram
+node "Client" {
+  [Telegram App]
+}
+
+node "Server" {
+  [Node.js Runtime]
+  [Express Server]
+  [OpenAI Client]
+  database "MongoDB"
+}
+
+cloud "External Services" {
+  [OpenAI API]
+  [Telegram Bot API]
+}
+
+[Telegram App] --> [Telegram Bot API]
+[Express Server] --> [OpenAI API]
+[Express Server] --> MongoDB
+[OpenAI Client] --> [OpenAI API]
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml Component Diagram
+
+package "Configuration" {
+  [config.ts] as Config
+  [environment.ts] as Env
+}
+
+package "Core Services" {
+  [index.ts] as Main
+  [web-server.ts] as WebServer
+  [openai.ts] as OpenAIClient
+}
+
+package "Operations" {
+  [userOps.ts] as UserOps
+  [messageOps.ts] as MessageOps
+  [openaiOps.ts] as OpenAIOps
+}
+
+package "External Services" {
+  [OpenAI API] as OpenAI
+  [MongoDB] as DB
+  [Telegram Bot API] as TelegramAPI
+}
+
+' Dependencies
+Config ..> Env
+Main ..> Config
+Main ..> OpenAIClient
+Main ..> WebServer
+
+WebServer ..> UserOps
+WebServer ..> MessageOps
+WebServer ..> OpenAIOps
+
+OpenAIOps ..> OpenAI
+UserOps ..> DB
+MessageOps ..> DB
+
+WebServer ..> TelegramAPI
+
+note right of Main
+  Entry point that initializes:
+  - OpenAI client
+  - Web server
+  - Database connection
+end note
+
+@enduml

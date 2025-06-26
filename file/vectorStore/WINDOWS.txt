@@ -1,0 +1,18 @@
+// TECNICA-WINDOWS.txt
+[WINDOWS ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per server:
+- WINDOWS
+Se il tuo server non è di questi tipi, consulta il file appropriato.
+
+1.PROBLEMA INSTALLAZIONE WINDOWS SU SERVER WINDOWS
+Caso 1: Si è creato un server di tipo WINDOWS ma non viene trovato il volume per installare il sistema operativo
+Soluzione 1: Per la creazione di un nuovo server Windows, installazione dischi o volumi nonchè i driver puoi seguire questo video con le dovute variazioni del caso: https://youtu.be/_cZyCw29dqI
+
+2.PROBLEMA ACCESSO RDP SU SERVER WINDOWS
+Caso 1: Se non si riesce ad accedere in RDP su server di tipo WINDOWS
+Soluzione 1: Accedere alla gestione server e accedere tramite VNC per verificare un'eventuale modifica nella configurazione nel sistema operativo (firewall, aggiornamenti etc.)
+
+3.MANCATO ACCESSO TRAMITE VNC SU SERVER WINDOWS
+Caso 1: Non è possibile collegarsi tramite VNC di Konsolex al server
+Soluzione 1: Se non si accede al server tramite VNC bisogna riavviare il server. Successivamente verificare le risorse utilizzate e valutare un upgrade
+

@@ -1,0 +1,60 @@
+@startuml Error Handling Flow Diagram
+
+start
+
+:Process user message;
+
+fork
+  :Send to OpenAI API;
+  
+  if (API response successful?) then (yes)
+    :Process API response;
+  else (no)
+    :Log API error;
+    :Increment retry counter;
+    
+    if (Retry limit reached?) then (yes)
+      :Create new thread;
+      :Notify user of reset;
+    else (no)
+      :Wait for backoff period;
+      :Retry API request;
+    endif
+  endif
+  
+fork again
+  :Start timeout monitor;
+  
+  if (Response within timeout?) then (yes)
+    :Cancel timeout monitor;
+  else (no)
+    :Log timeout;
+    :Interrupt API call;
+    :Send timeout message;
+    
+    if (Persistent timeout?) then (yes)
+      :Reset user thread;
+      :Escalate to admin;
+    endif
+  endif
+end fork
+
+if (Response quality check passed?) then (yes)
+  :Format and send response;
+else (no)
+  :Log quality issue;
+  
+  if (Critical quality issue?) then (yes)
+    :Send fallback response;
+    :Flag for review;
+  else (no)
+    :Apply response corrections;
+    :Send with warning;
+  endif
+endif
+
+:Update conversation metrics;
+
+stop
+
+@enduml

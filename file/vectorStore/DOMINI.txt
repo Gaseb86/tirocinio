@@ -1,0 +1,93 @@
+// TECNICA-DOMINI.txt
+[DOMINI, RECORD DNS, RECORD NAMESERVER ONLY]
+IMPORTANTE: Questo file contiene ESCLUSIVAMENTE soluzioni per:
+- DOMINI
+- RECORD DNS
+- RECORD NAME SERVER
+Se il tuo servizio non è di questi tipi, consulta il file appropriato.
+
+      1.PROBLEMI TRASFERIMENTO DOMINI SU ALTRO PROVIDER
+Caso 1: Problema di trasferimento su altro provider e dominio bloccato:
+Soluzione 1: Accedere alla lista domini e se il dominio ha l'opzione locked attiva cliccare su Abiltato per disattivarlo
+Caso 2: Problema di trasferimento su altro provider e Auth code errato (codice di migrazione):
+Soluzione 2: Accedere nella gestione del dominio e modificare il codice di migrazione (authcode o authinfo). La modifica può avvenire se il dominio è in stato attivo
+Caso 3: Errore di trasferimento verso altro provider
+Soluzione 3: Se ci sono errori di trasferimento su altro provider i problemi possono essere:
+    1. auth code errato
+    2. dominio bloccato
+    3. non sono trascorsi 60 giorni dall'ultima operazione fatta (registrazione, trasferimento o rinnovo), ad esempio per domini .com e .net.
+
+      2. PROBLEMI REGISTRAZIONE O TRASFERIMENTO DOMINI
+Caso 1: Host non presente nella lista dei server (host) in fase di registrazione di un dominio
+Soluzione 1: Gli host vanno creati manualmente. Se non sono nella lista dei server selezionabili in fase di registrazione vanno creati dalla sezione Host del menù profilo. Una volta creato rimane a disposizione per future registrazioni
+Caso 2: Contatto Proprietario non presente nella lista in fase di registrazione
+Soluzione 2: I contatti vanno creati manualmente. Se il nominativo non è presente nella lista dei contatti in fase di registrazione va creato dalla sezione Clienti del menù profilo. Una volta creato rimane a disposizione per future registrazioni
+Caso 3: L'estensione non è presente per la registrazione o il trasferimento del dominio
+Soluzione 3: Aprire il ticket al supporto di livello 2 per abilitare immediatamente l'estensione richiesta
+
+      3.PROBLEMA RECORD DNS DI UN DOMINIO
+Caso 1: Nessun dns del dominio si propaga
+Soluzione 1: Se nessun dns si propaga bisogna procedere con questi passaggi, uno alla volta, finchè il problema non è risolto:
+    1. verificare che i record necessari per la corretta propagazione siano stati creati (record A dominio.tld, record A www, record MX, record A mx, ns1, ns2)
+    2. verificare di utilizzare i name server di On The Cloud dalla sezione Cambia NS. Solo se si utilizzano i name server di On The Cloud è possibile gestire i dns su Konsolex
+    3. verificare il valore TTL (valore espresso in secondi: 300=5 minuti; 3600=1 ora; 86400=24 ore)
+NB: alcuni server potrebbero aggiornare i record dopo 24 ore se il vecchio TTL era impostato a 86400. Se i record sono nuovi impostare il TTL a 300 (5 minuti) in fase di creazione dei record.
+Caso 2: Non si propaga un solo dns
+Soluzione 2: Se non si propaga o non si modifica un solo dns bisogna verificare che la sintassi utilizzata sia quella corretta e fare un controllo che i ns siano di On The Cloud dalla sezione Cambia NS.
+####TIPS: la propagazione dei dns e dei ns deve essere verificata attraverso il servizio online whatsmydns.net tenendo presente che il TTL può creare divergenze rispetto ai risultati presenti dopo la verifica.
+
+      4. PROBLEMI RINNOVO DOMINIO
+Caso 1: Problema di rinnovo con il dominio impostato in autorinnovo
+Soluzione 1: Se il dominio era impostato in autorinnovo ma non si è rinnovato il problema è semplicemente che con autorinnovo attivo il rinnovo avviene 3 giorni prima della scadenza. Se non ci sono fondi sufficiente sul credito del cliente, 3 giorni prima della scadenza, il dominio non si rinnova e dovrà essere rinnovato manualmente dalla sezione I miei servizi nel menu profilo.
+Caso 2: Dominio Scaduto
+Soluzione 2: Se il dominio è scaduto per rinnovarlo bisogna accedere alla sezione I Mieri Servizi del menu profilo ed effettuare il restore.
+
+      5. PROBLEMA CAMBIO PROPRIETARIO DOMINIO
+Caso 1: si è effettuato il cambio proprietario ma non è visibile facendo un whois del dominio
+Soluzione 1: Se il cambio è andato a buon fine ma facendo un whois (per i domini .it link: https://web-whois.nic.it/) non si vedono i dati aggiornati attendere almeno 72 ore. 
+
+---GUIDA KONSOLEX---
+Gestione dei DOMINI su Konsolex
+Guida della sezione DOMINI del portale Konsolex:
+        
+        1. Accedendo alla sezione domini vediamo la lista dei domini presenti sul portale. Ogni utente avrà la sua lista e potrà vedere, nella schermata principale:
+  nome dominio
+  registrar (sul portale konsolex in fase di registrazione il cliente può scegliere su quale registrant registrare il proprio dominio. La differenza tra i diversi registrar è sul costo; in base all'estensione (tld) del dominio si potrà scegliere il registrant più economico)
+  data di scadenza
+  stato del dominio (attivo, in scadenza, scaduto)
+  Locked: se il dominio è bloccato non è possibile il trasferimento su altro provider.
+  Automigrazione (Attiva o disattiva): l'automigrazione è da consigliare quando si parla di domini perchè permette a Konsolex di rinnovare automaticamente il dominio sul registrant più economico alla data di scadenza. Questa operazione non prevede alcuna variazione dei record dns e dei ns, è solo un risparmio per il cliente di On The Cloud srl
+  cerca domini: da compilare in caso di mancata visualizzazione di un dominio o per ricercare velocemente un dominio 
+        
+        2. Entrando nella gestione del singolo dominio abbiamo 4 sezioni:
+  1. DETTAGLI
+troviamo il codice di migrazione (authcode o authinfo) che serve per migrare il dominio su altro provider e la possibilità di generarne uno nuovo.
+  2. DNS
+abbiamo la gestione dei record dns. Qui è possibile modificare anche i TTL dei record DNS. In questa sezione non è possibile la modifica dei name server (ns)
+  3.PROPRIETARIO DOMINIO
+abbiamo la gestione delle anagrafiche dei proprietari domini. In caso di variazione di un proprietario successivamente alla registrazione bisogna attendere almeno 72 ore per la propagazione della variazione.
+  4.CAMBIA NS
+in questa sezione, e solo in questa sezione, è possibile modificare i name server del dominio. Se non si utilizzano i name server di On The Cloud non è possibile gestire i record dns dal portale Konsolex. Una eventuale modifica dei name server può richiedere anche 24 ore per la corretta propagazione.
+####TIPS RECORD DNS, TTL, NS
+1.I record dns sono necessari per poter visionare su internet il dominio (sito web) o gesitre il servizio Email o altri servizi che richiedono un record dns. Nello specifico i record principali sono:
+  A. Record tipo A valore nomedominio.tld: questo record, associato ad un ip, permette di visualizzare, insieme al record A www, il sito nomedominio.tld
+  B. Record tipo A valore www: questo record, associato ad un ip, permette di visualizzare, insieme al record A nomedominio.tld, il sito nomedominio.tld
+  C. Record tipo MX valore mx.dominio.tld: questo record è necessario per poter utilizzare il servizio mail riferito al dominio
+  D. Record tipo A valore mx è associato al record tipo MX e va inserito, nella creazione, un ip di riferimento
+  E. Record tipo SPF questo record permette di autenticare il servizio email
+  F. Record DKIM: questo record permette di autenticare il servizio email 
+  G. Il TTL (time to life) è il tempo in cui il record si propaga la prima volta e il tempo in cui i server faranno una nuova scansione per vedere se qualche valore è cambiato.I valori da utilizzare, espressi in secondi, sono 300 o 3600 o 86400
+2. Per verificare la corretta propagazione o configurazione dei record dns e dei nameserver si può utilizzare il servizio whatsmydns.net
+        
+        3. AGGIUNTA NUOVO DOMINIO: REGISTAZIONE E TRASFERIMENTO DOMINIO
+dalla sezione DOMINI possiamo procedere a registrare o trasferire un dominio su Konsolex.
+  A. REGISTRAZIONE DOMINIO
+per registrare un dominio bisogna semplicemente inserire il dominio con estensione (dominio.tld) senza wwww, dopodichè inserire gli host web e mail, associare il proprietario e selezionare il registrant.
+L'host non è collegata automaticamente ad un server, dunque se non è visibile va creato. 
+	B.TRASFERIMENTO DOMINIO
+è un'operazione identica a quella della registrazione con la sola differenza che il clinte deve inserire anche il codice di migrazione (authcode, authinfo)
+
+####TIPS DOMINI: Opzione Autorinnovo dominio: dalla sezione I MIEI SERVIZI del menu profilo è possibile abilitare l'autorinnovo del dominio. L'autorinnovo permette di rinnovare automaticamente il dominio al prezzo più economico senza dover procedere ad alcuna operazione di trasferimento e senza nessuna variazione delle impostazioni (record, ns etc.).
+####TIPS REGISTRAZIONE DOMINIO: Sia gli host che i proprietari una volta creati saranno sempre utilizzabili per successive registrazioni
+
+

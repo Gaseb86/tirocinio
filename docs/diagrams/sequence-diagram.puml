@@ -1,0 +1,33 @@
+@startuml Sequence Diagram
+actor User
+participant "Web Server" as WS
+participant "User Ops" as UO
+participant "Message Ops" as MO
+participant "OpenAI" as AI
+
+User -> WS: Send Message
+activate WS
+
+WS -> UO: Find/Create User
+activate UO
+UO --> WS: User Data
+deactivate UO
+
+WS -> MO: Create User Message
+activate MO
+MO --> WS: Message Saved
+deactivate MO
+
+WS -> AI: Get Reply
+activate AI
+AI --> WS: GPT Response
+deactivate AI
+
+WS -> MO: Save GPT Message
+activate MO
+MO --> WS: Message Saved
+deactivate MO
+
+WS --> User: Response
+deactivate WS
+@enduml

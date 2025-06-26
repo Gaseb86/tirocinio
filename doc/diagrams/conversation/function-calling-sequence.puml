@@ -1,0 +1,70 @@
+@startuml Function Calling Sequence Diagram
+
+participant "User" as User
+participant "Bot Interface" as Bot
+participant "Message Handler" as Handler
+participant "OpenAI Service" as OpenAI
+participant "Function Manager" as Functions
+participant "Konsolex API" as Konsolex
+
+User -> Bot: Send request
+activate Bot
+
+Bot -> Handler: Process message
+activate Handler
+
+Handler -> OpenAI: Create thread message
+activate OpenAI
+
+Handler -> OpenAI: Create run with function definitions
+OpenAI --> Handler: Run created
+
+loop Until completion
+  Handler -> OpenAI: Check run status
+  OpenAI --> Handler: Run status
+end
+
+alt Function calling required
+  OpenAI --> Handler: Request function execution
+  activate Handler
+  
+  Handler -> Functions: Execute tool
+  activate Functions
+  
+  alt Server operation
+    Functions -> Konsolex: Server API request
+    Konsolex --> Functions: Operation result
+  else Domain operation
+    Functions -> Konsolex: Domain API request
+    Konsolex --> Functions: Operation result
+  else Container operation
+    Functions -> Konsolex: Container API request
+    Konsolex --> Functions: Operation result
+  else Escalation
+    Functions -> Functions: Create ticket
+  end
+  
+  Functions --> Handler: Function result
+  deactivate Functions
+  
+  Handler -> OpenAI: Submit tool outputs
+  OpenAI --> Handler: Updated run
+  
+  loop Until completion
+    Handler -> OpenAI: Check run status
+    OpenAI --> Handler: Run status
+  end
+  deactivate Handler
+end
+
+OpenAI --> Handler: Final response
+deactivate OpenAI
+
+Handler -> Handler: Format response
+Handler --> Bot: Formatted response
+deactivate Handler
+
+Bot --> User: Display response
+deactivate Bot
+
+@enduml
