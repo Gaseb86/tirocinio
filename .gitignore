@@ -2,3 +2,14 @@ node_modules/
 .env
 dist/
 .vscode/
+
+# Sensitive files
+src/utils/environment.ts
+src/utils/constants.ts
+
+# Other sensitive data patterns
+*.env.*
+**/secrets.*
+**/credentials.*
+*config.json
+
