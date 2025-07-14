@@ -1,11 +1,53 @@
-@startuml Component Diagram
+@startuml ComponentDiagram
 
-package "Presentation Layer" {
+' Layout improvement directives
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam ArrowColor #444444
+skinparam Padding 12
+skinparam Shadowing false
+skinparam defaultFontSize 21
+skinparam componentFontSize 21
+skinparam packageFontSize 24
+skinparam ArrowFontSize 18
+skinparam databaseFontSize 21
+skinparam cloudFontSize 21
+
+' Use horizontal layout for overall diagram
+left to right direction
+
+' Color coding for layers
+skinparam package {
+  BackgroundColor<<presentation>> #D5E8D4
+  BackgroundColor<<application>> #DAE8FC
+  BackgroundColor<<data>> #FFF2CC
+  BorderColor<<presentation>> #82B366
+  BorderColor<<application>> #6C8EBF
+  BorderColor<<data>> #D6B656
+  FontStyle bold
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #666666
+}
+
+skinparam database {
+  BackgroundColor #F8CECC
+  BorderColor #B85450
+}
+
+skinparam cloud {
+  BackgroundColor #F5F5F5
+  BorderColor #999999
+}
+
+package "Presentation Layer" <<presentation>> {
   [TelegramBot] as TgBot
   [KonsolexInterface] as WebAdmin
 }
 
-package "Application Layer" {
+package "Application Layer" <<application>> {
   [OpenAIHandler] as AIHandler
   [EndpointHandler] as EndpointHandler
   [TicketingSystem] as Tickets
@@ -14,11 +56,11 @@ package "Application Layer" {
   [TelegramCommandHandler] as TelegramCmd
 }
 
-package "Data Layer" {
+package "Data Layer" <<data>> {
   [UserRepository] as UserRepo
   [MessageRepository] as MsgRepo
   [ScoreRepository] as ScoreRepo
-  database "MySQL Database" as DB
+  database "MySQL\nDatabase" as DB
 }
 
 cloud "External Services" {
@@ -27,50 +69,45 @@ cloud "External Services" {
   [Telegram API] as TelegramAPI
 }
 
-' Presentation to Application
-TgBot --> AIHandler : uses
-TgBot --> Tickets : notifies
-TgBot --> TelegramCmd : routes commands to
-WebAdmin --> WebSrv : accesses
-WebAdmin .> Tickets : manages
-WebAdmin ..> EndpointHandler : performs operations via
+' SIMPLIFIED CONNECTIONS
+' Primary user flows (solid lines)
+TgBot --> TelegramCmd : commands
+WebAdmin --> WebSrv : requests
 
-' Application interconnections
-AIHandler --> AuxFuncs : uses
-AIHandler --> EndpointHandler : calls functions via
-WebSrv --> Tickets : manages
-WebSrv --> AIHandler : uses
-WebSrv --> EndpointHandler : calls functions via
-AuxFuncs --> Tickets : creates
-AuxFuncs --> EndpointHandler : uses
-TelegramCmd --> Tickets : manages tickets
-TelegramCmd --> EndpointHandler : executes operations
-TelegramCmd --> AIHandler : generates responses
+' Core application connections (dotted lines)
+AIHandler ..> AuxFuncs
+WebSrv ..> AIHandler
+WebSrv ..> Tickets
+TelegramCmd ..> AIHandler
+TelegramCmd ..> Tickets
 
-' Application to Data
-AIHandler --> UserRepo : queries/updates
-AIHandler --> MsgRepo : stores messages
-EndpointHandler --> UserRepo : retrieves user info
-EndpointHandler --> MsgRepo : stores/retrieves messages
-EndpointHandler --> ScoreRepo : accesses scores
-WebSrv --> UserRepo : queries/manages
-WebSrv --> MsgRepo : retrieves/manages
-AuxFuncs --> UserRepo : creates/updates
-AuxFuncs --> MsgRepo : creates/updates
-Tickets --> MsgRepo : manages tickets and associates with messages
-TelegramCmd --> UserRepo : retrieves user data
-TelegramCmd --> MsgRepo : manages messages
+' Critical data flows (dashed lines)
+AIHandler -[dashed]-> UserRepo
+AIHandler -[dashed]-> MsgRepo
+WebSrv -[dashed]-> UserRepo
+WebSrv -[dashed]-> MsgRepo
+Tickets -[dashed]-> MsgRepo
 
-' Data to Database
-UserRepo --> DB : persists
-MsgRepo --> DB : persists
-ScoreRepo --> DB : persists
+' External service connections (green lines)
+AIHandler -[#008800]-> OpenAI : API calls
+EndpointHandler -[#008800]-> Konsolex : operations
+TgBot -[#008800]-> TelegramAPI : messages
+WebSrv -[#008800]-> TelegramAPI : notifications
 
-' External connections
-AIHandler --> OpenAI : requests completions
-EndpointHandler --> Konsolex : executes operations
-TgBot --> TelegramAPI : sends/receives messages
-WebSrv --> TelegramAPI : sends notifications
-TelegramCmd --> TelegramAPI : handles bot commands
+' Database connections (thick lines)
+UserRepo -[thickness=2]-> DB : persists
+MsgRepo -[thickness=2]-> DB : persists
+ScoreRepo -[thickness=2]-> DB : persists
+
+' Key functional relationships
+EndpointHandler <.. AIHandler : calls functions
+Tickets <.. WebSrv : manages tickets
+Tickets <.. TelegramCmd : manages tickets
+
+@enduml
+EndpointHandler -[#008800]-> Konsolex : operations
+TgBot -[#008800]-> TelegramAPI : messages
+WebSrv -[#008800]-> TelegramAPI : notifications
+TelegramCmd -[#008800]-> TelegramAPI : commands
 
 @enduml

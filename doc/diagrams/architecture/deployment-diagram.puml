@@ -1,8 +1,18 @@
 @startuml Deployment Diagram
 
+' Increase font sizes by 100% for better readability
+skinparam defaultFontSize 32
+skinparam componentFontSize 36
+skinparam nodeFontSize 40
+skinparam databaseFontSize 36
+skinparam cloudFontSize 40
+skinparam ArrowFontSize 28
+skinparam Padding 20
 skinparam linetype ortho
+skinparam BackgroundColor white
 
-node "Application Server" as AppServer {
+' Application Server
+node "Node.js Application Server" as AppServer {
   artifact "Node.js Application" as NodeApp {
     component TelegramBot
     component WebServer
@@ -12,15 +22,17 @@ node "Application Server" as AppServer {
   artifact "pm2 Process Manager" as PM2
 }
 
+' Database Server
 node "Database Server" as DBServer {
   database "MySQL Database" as MySQL {
     frame "Users Table"
-    frame "Messages Table"
+    frame "Messages Table" 
     frame "Assistants Table"
     frame "Scores Table"
   }
 }
 
+' External Cloud Services
 cloud "OpenAI Cloud" as OpenAICloud {
   component "GPT-4 API" as GPT4
   component "Embeddings API" as Embeddings
@@ -32,10 +44,12 @@ cloud "Telegram Cloud" as TelegramCloud {
 }
 
 cloud "Konsolex Platform" as KonsolexCloud {
-  component "Auth API" as KonsolexAuth
-  component "Domains API" as KonsolexDomains
-  component "Servers API" as KonsolexServers
-  component "Containers API" as KonsolexContainers
+  component "API Gateway" as KonsolexAPI {
+    component "Auth API" as KonsolexAuth
+    component "Domains API" as KonsolexDomains
+    component "Servers API" as KonsolexServers
+    component "Containers API" as KonsolexContainers
+  }
 }
 
 node "Client Devices" as Clients {
@@ -43,23 +57,23 @@ node "Client Devices" as Clients {
   component "Web Browser" as Browser
 }
 
-' Connections between components
-Clients -- TelegramCloud : HTTPS
-Clients -- AppServer : HTTPS
+' Connections with explicit types - Clients to Services
+Clients -- TelegramCloud : "HTTPS (User messages)"
+Clients -- AppServer : "HTTPS (Web interface)"
 
-AppServer -- DBServer : TCP/IP
-AppServer -- OpenAICloud : HTTPS
-AppServer -- TelegramCloud : HTTPS
-AppServer -- KonsolexCloud : HTTPS
+' Database connections
+AppServer -- DBServer : "TCP/IP (SQL)"
 
-' Internal connections
-TelegramBot -- TelegramAPI
-WebServer -- Browser
-OpenAIHandler -- GPT4
-OpenAIHandler -- AssistantsAPI
-EndpointHandler -- KonsolexAuth
-EndpointHandler -- KonsolexDomains
-EndpointHandler -- KonsolexServers
-EndpointHandler -- KonsolexContainers
+' External API connections
+AppServer -- OpenAICloud : "HTTPS (AI model requests)"
+AppServer -- TelegramCloud : "HTTPS (Bot commands)"
+AppServer -- KonsolexCloud : "HTTPS (Platform operations)"
+
+' Internal component connections
+TelegramBot -- WebServer : "Internal API calls"
+OpenAIHandler -- EndpointHandler : "Function calls"
+WebServer -- OpenAIHandler : "API requests"
+WebServer -- EndpointHandler : "Service operations"
+PM2 .. NodeApp : "Process management"
 
 @enduml

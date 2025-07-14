@@ -1,14 +1,7 @@
 @startuml Class Diagram
 
 skinparam classAttributeIconSize 0
-skinparam defaultFontSize 14
-skinparam classFontSize 16
-skinparam classFontStyle bold
-skinparam padding 4
-skinparam classBackgroundColor #f0f0f0
-skinparam linetype ortho
 
-' Key entities that should remain intact
 class User {
   +user_id: string
   +telegram_id: string
@@ -44,64 +37,72 @@ class Message {
   +update_time: Date
   
   +getMessagesByUserId(userId: string): Message[]
-  +create(userId: string, assistantId: string, threadId: string, message: string,
-  timestamp: number, type: MessageType, ticketOpen?: boolean, ticketId?: number): Message
+  +create(userId: string, assistantId: string, threadId: string, message: string, timestamp: number, type: MessageType, ticketOpen?: boolean, ticketId?: number): Message
   +updateTicketStatusByMsgId(msgId: number, status: boolean): void
   +getAllMessages(): Message[]
   +setScoreId(scoreId: number): void
 }
 
-' Corrected OpenAI classes
 class Assistant {
-  +id: string
+  +id: number
+  +assistant_id: string
   +name: string
-  +model: string
-  +instructions: string
+  +img: string
   +tools: Tool[]
+  +model: string
+  +create_time: Date
+  +update_time: Date
   
-  +create(name: string, model: string, instructions: string): Assistant
-  +retrieve(assistantId: string): Assistant
-  +update(assistantId: string, updates: object): Assistant
-  +delete(assistantId: string): void
+  +findById(assistantId: string): Assistant
+  +create(assistantId: string, name: string, img: string): Assistant
+}
+
+class Score {
+  +id: number
+  +question: string
+  +answer: string
+  +score: number
+  +file_search_result: string
+  +relevance: number
+  +create_time: Date
+  +update_time: Date
+  
+  +create(question: string, answer: string, score: number): Score
+  +getAverageScore(): number
+  +getRelevanceById(id: number): number
 }
 
 class Thread {
   +id: string
-  +created_at: number
-  +metadata: object
+  +user_id: string
+  +last_message_id: string
+  +expired: boolean
+  +create_time: Date
+  +update_time: Date
   
-  +create(metadata?: object): Thread
-  +retrieve(threadId: string): Thread
-  +delete(threadId: string): void
-  +addMessage(threadId: string, role: string, content: string): void
-  +listMessages(threadId: string): Message[]
+  +create(): Thread
+  +addMessage(role: string, content: string): Message
+  +getMessages(): Message[]
+  +reset(): void
 }
 
 class Run {
   +id: string
   +thread_id: string
   +assistant_id: string
-  +status: RunStatus
-  +started_at: number
-  +completed_at: number
+  +status: string
+  +started_at: Date
+  +completed_at: Date
+  +tool_calls: ToolCall[]
   +required_action: RequiredAction
+  +last_error: Error
   
-  +create(threadId: string, assistantId: string, instructions?: string): Run
+  +create(threadId: string, assistantId: string, tools: Tool[]): Run
   +retrieve(threadId: string, runId: string): Run
-  +submitToolOutputs(threadId: string, runId: string, outputs: ToolOutput[]): Run
-  +cancel(threadId: string, runId: string): Run
-}
-
-' Simplified auxiliary classes
-class Score {
-  +id: number
-  +question: string
-  +answer: string
-  +score: number
-  +relevance: number
-  
-  +create(question: string, answer: string, score: number): Score
-  +getRelevanceById(id: number): number
+  +submitToolOutputs(threadId: string, runId: string, outputs: ToolOutput[]): void
+  +waitForResponse(userId: string, threadId: string, runId: string): Promise<Run>
+  +handleToolCalls(openai: OpenAI, run: Run, threadId: string, runId: string): void
+  +checkFileSearchRelevance(threadId: string, runId: string): Promise<Score | null>
 }
 
 class ToolCall {
@@ -109,10 +110,9 @@ class ToolCall {
   +function: Function
   +type: string
   
-  +executeTool(functionName: string, args: any): Promise<any>
+  +executeTool(functionName: string, args: any, userId: string): Promise<any>
 }
 
-' Enumerations
 enum MessageType {
   User
   GPT
@@ -129,8 +129,7 @@ enum RunStatus {
   cancelled
 }
 
-' Key relationships
-User "1" --> "*" Message : writes
+User "1" --> "*" Message : write
 User "1" --> "1" Thread : owns
 Thread "1" --> "*" Message : contains
 Thread "1" --> "*" Run : executes

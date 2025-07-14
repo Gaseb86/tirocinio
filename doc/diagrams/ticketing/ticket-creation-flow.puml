@@ -6,97 +6,77 @@ skinparam ArrowColor #666666
 skinparam ActivityDiamondBackgroundColor White
 skinparam NoteBackgroundColor #FFFFCC
 
-title Flusso di Creazione Ticket
+title Ticket Creation Flow
 
 start
 
-:Utente invia messaggio\ncon richiesta complessa;
+:User sends message\nwith complex request;
 
-note right
-  La richiesta può contenere:
-  - Problemi multi-livello
-  - Situazioni non standard
-  - Errori di sistema
-end note
+:AI analyzes the request;
 
-:AI analizza la richiesta;
-
-if (AI può risolvere?) then (Sì)
-  :Genera risposta\ne risolve autonomamente;
+if (Can AI solve it?) then (Yes)
+  :Generates response\nand solves autonomously;
   stop
 else (No)
-  if (Richiesta esplicita\ndi supporto umano?) then (Sì)
-    :AI conferma necessità\ndi escalation;
-  else (No)
-    :AI rileva autonomamente\nche è necessario escalare;
-    :AI suggerisce apertura ticket;
-    
-    if (Utente conferma?) then (No)
-      :AI tenta approccio\nalternativo;
-      stop
-    else (Sì)
-      :Utente accetta escalation;
-    endif
+  :AI suggests opening a ticket;
+  if (User confirms?) then (No)
+    :AI attempts alternative\napproach;
+    stop
+  else (Yes)
+    :User accepts escalation;
   endif
 endif
 
-:Sistema invoca funzione openTicket;
+:System invokes openTicket function;
 
 note right
   In openai-handlers.ts
-  tramite executeTool()
+  via executeTool()
 end note
 
-:Creazione struttura ticket\ncon parametri;
+:Creating ticket structure\nwith parameters;
 
 note right
-  Parametri principali:
+  Main parameters:
   - UserId
   - MsgId
-  - Riassunto del problema
-  - Cronologia rilevante
+  - Problem summary
+  - Relevant history
 end note
 
-:Sistema esegue sendMessageToAdmin;
+:System executes sendMessageToAdmin;
 
 fork
-  :Aggiorna stato del messaggio\noriginale (ticketOpen = true);
+  :Updates status of original\nmessage (ticketOpen = true);
   note right
     Via updateTicketStatusByMsgId()
-    nel repository dei messaggi
+    in message repository
   end note
 fork again
-  :Crea o aggiorna ticket\nnel sistema;
+  :Creates ticket\nin system;
   note right
     Via getOrCreateTicket()
-    nel modulo ticketsCashe.ts
-  end note
-fork again
-  :Prepara bottoni interattivi\nper amministratori;
-  note right
-    - Reply
-    - Close Ticket
-    - View User Messages
+    in ticketsCashe.ts module
   end note
 end fork
 
-:Sistema invia notifica\nai canali amministrativi;
+:System sends notification\nto administrative channels;
 
 fork
-  :Notifica Telegram\ncon bottoni interattivi;
+  :Telegram notification\nwith interactive buttons;
   note right
-    Inviato al primo admin in
+    Sent to first admin in
     TelegramAdminIdArray
   end note
 fork again
-  :Aggiornamento dashboard\nweb in tempo reale;
+  :Updates web dashboard\nin real time;
   note right
-    Tramite KONSOLEX_ENDPOINT.
+    Through KONSOLEX_ENDPOINT.
     MESSAGES_UPDATE
   end note
 end fork
 
-:Conferma all'utente\ndell'apertura ticket;
+:Confirms ticket opening\nto user;
 
 stop
 

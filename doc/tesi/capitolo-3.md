@@ -1,33 +1,39 @@
+<style>
+code {
+  color:rgb(182, 36, 0) !important;
+}
+</style>
+
 # Capitolo 3: Casi d'Uso
 
-Questo capitolo descrive dettagliatamente i principali scenari di utilizzo del chatbot AI per il supporto tecnico, evidenziando i flussi di interazione tra i diversi attori del sistema: utenti finali, operatori di supporto, amministratori e il sistema stesso. L'identificazione e l'analisi dei casi d'uso hanno costituito una fase fondamentale nel processo di progettazione, permettendo di definire con precisione il comportamento atteso del sistema e garantire che tutte le esigenze degli stakeholder fossero adeguatamente indirizzate.
+Questo capitolo descrive dettagliatamente i principali scenari di utilizzo del chatbot AI (sistema automatizzato di conversazione basato su Intelligenza Artificiale) per il supporto tecnico, evidenziando i flussi di interazione tra i diversi attori del sistema: utenti finali, operatori di supporto, amministratori e il sistema stesso. 
 
-## 3.1 Interazione Utente
+A differenza dell'approccio tradizionale di sviluppo software dove i casi d'uso guidano l'implementazione, in questo progetto la documentazione formale dei casi d'uso è stata sviluppata dopo l'implementazione del sistema. 
 
-Lo scenario fondamentale su cui si basa l'intero sistema è l'interazione diretta tra l'utente e il chatbot AI, implementato principalmente attraverso il flusso gestito dall'endpoint `API.SEND_MESSAGE` nel file `web-server.ts`.
+La formalizzazione a posteriori dei casi d'uso ha comunque fornito un importante strumento per validare la completezza del sistema e fornire una documentazione completa.
+
+Lo scenario fondamentale su cui si basa l'intero sistema è l'interazione diretta tra l'utente e il chatbot AI, implementato principalmente attraverso il flusso gestito dall'endpoint `API.SEND_MESSAGE` (punto di accesso all'interfaccia di programmazione che invia i messaggi) nel file `web-server.ts` (componente del codice che gestisce le richieste web).
 
 ## Caso d'uso: InterazioneBaseUtenteChatBot
 **Id:** 1
 **Breve descrizione:** L'utente invia un messaggio di testo tramite l'interfaccia di chat e riceve una risposta generata dal sistema AI.
 **Attori primari:** Utente
-**Attori secondari:** Sistema AI (GPT)
-**Precondizioni:** 
-- L'utente è registrato nel sistema con un ID utente valido
-- L'utente ha un ID Telegram associato
-- L'utente non ha ticket di supporto aperti
+**Attori secondari:** Sistema AI (Intelligenza Artificiale che elabora e risponde ai messaggi)
+**Precondizioni:** L'utente è registrato nel sistema con credenziali valide
 
 **Flusso Principale**:
 1. L'utente invia un messaggio di testo tramite l'interfaccia chat
-2. Il sistema riceve il messaggio con l'ID utente e l'ID Telegram
+2. Il sistema riceve il messaggio con le credenziali dell'utente
 3. Il sistema verifica la validità dei parametri ricevuti
 4. Il sistema recupera il record dell'utente nel database
 5. Se l'utente non è presente nel database:
-    5.1 Include (***CreaNuovoUtente***)
-6. Se l'utente ha un ticket aperto:
+    5.1 Include (***CreaNuovoUtente***) - procedura per registrare un nuovo utente nel sistema
+6. Se l'utente ha un ticket aperto (richiesta di assistenza tecnica non ancora risolta):
     6.1 Sequenza degli eventi alternativa: ***Ticket aperto***
 7. Il sistema salva il messaggio dell'utente nel database
 8. Il sistema aggiorna lo stato dei messaggi per l'utente
 9. Il sistema genera una risposta utilizzando l'AI
+    9.1 Include (***GenerazioneRispostaAI***) - creazione della risposta tramite AI
 10. Il sistema salva la risposta dell'AI nel database
 11. Il sistema invia la risposta all'utente
 12. L'utente riceve la risposta generata dall'AI
@@ -35,11 +41,6 @@ Lo scenario fondamentale su cui si basa l'intero sistema è l'interazione dirett
 **Include**:
 1. **CreaNuovoUtente**: Quando l'utente non è ancora registrato nel sistema, viene eseguito il processo di creazione di un nuovo utente
 2. **GenerazioneRispostaAI**: Processo di generazione della risposta tramite il sistema AI
-3. **EsecuzioneFunzioniSpecializzate**: Quando l'AI riconosce la necessità di eseguire operazioni specifiche sui sistemi
-
-**Extend**:
-1. **InoltroMessaggioTicketAperto**: Estende il flusso principale quando l'utente ha un ticket di supporto aperto
-2. **AperturaTicketSupporto**: Estende il flusso principale quando l'AI determina che è necessaria l'assistenza umana
 
 **Postcondizioni**:
 - Il messaggio dell'utente è registrato nel database
@@ -47,48 +48,36 @@ Lo scenario fondamentale su cui si basa l'intero sistema è l'interazione dirett
 - L'utente visualizza la risposta generata dall'AI
 
 **Sequenza degli eventi alternativa**:
-1. **Parametri non validi**: Se i parametri del messaggio sono mancanti o non validi, il sistema restituisce un errore 400 con il messaggio appropriato e il flusso termina
-2. **Ticket aperto**: Se l'utente ha un ticket di supporto aperto, il messaggio viene inoltrato all'amministratore anziché all'AI, lo stato della risposta del cliente viene resettato, e il sistema aggiorna lo stato dei messaggi per l'amministratore
-3. **Errore di elaborazione**: Se si verifica un errore durante l'elaborazione, il sistema registra l'errore e restituisce un errore 500 con dettagli sull'errore
+1. **Parametri non validi**: Se i parametri del messaggio sono mancanti o non validi, il sistema restituisce un errore con il messaggio appropriato e il flusso termina
+2. **Ticket aperto**: Se l'utente ha un ticket di supporto aperto, il messaggio viene inoltrato all'amministratore anziché all'AI.
+3. **Errore di elaborazione**: Se si verifica un errore durante l'elaborazione, il sistema registra l'errore e restituisce dettagli sull'errore
 
 **Punti di estensione**:
-1. **Esecuzione di funzioni specializzate**: Nella fase di elaborazione AI, il sistema può estendere il flusso base identificando la necessità di eseguire funzioni specifiche (tool calls) come il riavvio server o il controllo dello stato dei servizi. Questo è implementato nella funzione `storeMessageAndCreateReply` che processa la risposta dell'AI e identifica eventuali richieste di esecuzione funzioni.
-
-2. **Escalation a supporto umano**: Il flusso principale può essere esteso con l'apertura di un ticket quando il sistema riconosce di non poter risolvere autonomamente la richiesta. Questo punto di estensione è implementato all'interno della logica di risposta dell'AI.
-
-Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagrams/use-cases/basic-interaction-use-case.puml`.
+1. **Escalation a supporto umano**: Il flusso principale può essere esteso con l'apertura di un ticket quando il sistema riconosce di non poter risolvere autonomamente la richiesta. Questo punto di estensione è implementato all'interno della logica di risposta dell'AI.
 
 ## Caso d'uso: CreaNuovoUtente
 **Id:** 2
 **Breve descrizione:** Il sistema crea un nuovo utente nel database con le informazioni necessarie, se questo non esiste già.
-**Attori primari:** Sistema AI
-**Attori secondari:** Sistema database, API Konsolex
+**Attori primari:** Sistema chatBot
+**Attori secondari:** Sistema database, API Konsolex (piattaforma roprietaria)
 
 **Precondizioni:**
-- Si dispone di un ID Telegram valido
-- Si dispone di un ID utente valido
-- L'utente non è presente nel database del sistema
+- Si dispone di credenziali valide
+- L'utente non è presente nel database del sitema chatBot
 
 **Flusso Principale**:
-1. Il sistema verifica la non esistenza dell'utente tramite l'ID Telegram
-2. Il sistema crea un nuovo thread OpenAI per l'utente
-3. Il sistema richiede le informazioni utente all'API Konsolex tramite l'ID utente
-4. Il sistema estrae il nome e cognome dalle informazioni ricevute
-5. Il sistema compone il nome utente combinando nome e cognome
-6. Il sistema crea un nuovo record utente nel database con le seguenti informazioni:
-   - ID utente
-   - ID thread OpenAI
-   - ID assistant OpenAI predefinito
-   - ID Telegram
-   - Nome utente
-7. Il sistema restituisce l'oggetto utente appena creato
+1. Il sistema verifica la non esistenza dell'utente
+2. Il sistema crea un nuovo thread per l'utente
+3. Il sistema richiede le informazioni utente all'API della piattaforma proprietaria Konsolex tramite le credenziali
+4. Il sistema estrae le informazioni dell'utente e crea un nuovo record utente nel database
+5. Il sistema restituisce utente appena creato
 
 **Postcondizioni**:
 - Un nuovo utente è registrato nel database con tutti i dati necessari
-- Un nuovo thread OpenAI è associato all'utente
+- Un nuovo thread è associato all'utente
 
 **Sequenza degli eventi alternativa**:
-1. **Errore API Konsolex**: Se si verifica un errore durante la richiesta delle informazioni utente, il sistema crea comunque l'utente con le informazioni minime disponibili (ID utente, ID Telegram)
+1. **Errore API Konsolex**: Se si verifica un errore durante la richiesta delle informazioni utente, il sistema crea comunque l'utente con le informazioni minime disponibili
 2. **Errore di creazione thread OpenAI**: Se si verifica un errore durante la creazione del thread, il sistema restituisce un errore e interrompe il processo di creazione utente
 
 ## Caso d'uso: InoltroMessaggioTicketAperto
@@ -118,11 +107,10 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 
 **Sequenza degli eventi alternativa**:
 1. **Errore di inoltro**: Se si verifica un errore nell'inoltro del messaggio all'amministratore, il sistema registra comunque il messaggio nel database e tenta nuovamente l'invio in seguito
-2. **Fallimento aggiornamento stato**: Se fallisce l'aggiornamento dello stato nel pannello, il sistema prosegue comunque garantendo che il messaggio sia stato registrato e inoltrato
 
 ## Caso d'uso: GenerazioneRispostaAI
 **Id:** 4
-**Breve descrizione:** Il sistema utilizza l'API OpenAI per generare una risposta contestuale al messaggio dell'utente.
+**Breve descrizione:** Il sistema utilizza l'API OpenAI di chatGPT per generare una risposta contestuale al messaggio dell'utente.
 **Attori primari:** Sistema AI
 **Attori secondari:** API OpenAI
 
@@ -133,11 +121,11 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 
 **Flusso Principale**:
 1. Il sistema aggiunge il messaggio dell'utente al thread OpenAI associato
-2. Il sistema crea una nuova esecuzione (run) nel thread con l'assistant ID associato all'utente
+2. Il sistema crea una nuova esecuzione (run) nel thread con l'assistant associato all'utente
 3. Il sistema fornisce all'AI gli strumenti disponibili per l'esecuzione di funzioni specializzate
 4. Il sistema attende che l'elaborazione AI sia completata, monitorando lo stato dell'esecuzione
 5. Se l'AI richiede l'esecuzione di funzioni specifiche:
-   5.1 Include (***EsecuzioneFunzioniSpecializzate***)
+   5.1 extend (***EsecuzioneFunzioniSpecializzate***)
 6. Il sistema recupera la risposta generata dall'AI
 7. Il sistema controlla la pertinenza della risposta e assegna un punteggio di rilevanza
 8. Il sistema formatta la risposta per la visualizzazione all'utente
@@ -145,12 +133,15 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 **Postcondizioni**:
 - Una risposta contestuale è stata generata dall'AI
 - La risposta è stata formattata per la visualizzazione
-- Un punteggio di rilevanza è stato assegnato alla risposta (opzionale)
+- Un punteggio di rilevanza è stato assegnato alla risposta
 
 **Sequenza degli eventi alternativa**:
 1. **Risposta non valida**: Se la risposta generata non è valida, il sistema restituisce un messaggio di errore predefinito
 2. **Timeout**: Se l'elaborazione richiede troppo tempo, il sistema crea un nuovo thread e restituisce un messaggio di errore
 3. **Errore API**: Se si verifica un errore con l'API OpenAI, il sistema gestisce l'eccezione e restituisce un messaggio appropriato
+
+**Punti di estensione**
+1. **Esecuzione di funzioni specializzate**: Nella fase di elaborazione AI, il sistema può estendere il flusso base identificando la necessità di eseguire funzioni specifiche (tool calls) come il riavvio server o il controllo dello stato dei servizi. Questo è implementato nella funzione `storeMessageAndCreateReply` che processa la risposta dell'AI e identifica eventuali richieste di esecuzione funzioni.
 
 ## Caso d'uso: EsecuzioneFunzioniSpecializzate
 **Id:** 5
@@ -159,31 +150,28 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 **Attori secondari:** API Konsolex, Sistemi server
 
 **Precondizioni:**
-- L'AI ha identificato una richiesta di esecuzione funzione nel messaggio dell'utente
-- L'utente ha i permessi necessari per eseguire la funzione richiesta
+- L'AI ha identificato una richiesta di esecuzione di funzione nel messaggio dell'utente
 
 **Flusso Principale**:
 1. L'AI richiede l'esecuzione di una funzione specifica con i relativi parametri
 2. Il sistema identifica la funzione richiesta tra quelle disponibili
 3. Il sistema raccoglie e valida i parametri necessari per l'esecuzione
-4. Se necessario, il sistema traduce i nomi dei server o domini forniti dall'utente nei corrispondenti ID di sistema
-5. Il sistema invia la richiesta all'API Konsolex con i parametri appropriati
-6. Il sistema riceve e interpreta la risposta dall'API
-7. Il sistema formatta la risposta in un formato comprensibile per l'utente
-8. Il sistema fornisce il risultato all'AI per completare la risposta all'utente
+4. Il sistema invia la richiesta all'API Konsolex con i parametri appropriati
+5. Il sistema riceve e interpreta la risposta dall'API
+6. Il sistema formatta la risposta in un formato comprensibile per l'utente
+7. Il sistema fornisce il risultato all'AI per completare la risposta all'utente
 
 **Postcondizioni**:
 - L'operazione tecnica richiesta è stata eseguita o è stato fornito un motivo del fallimento
 - Il risultato dell'operazione è stato formattato e fornito all'AI
 
 **Sequenza degli eventi alternativa**:
-1. **Funzione non riconosciuta**: Se la funzione richiesta non è tra quelle supportate, il sistema restituisce un errore
-2. **Parametri invalidi**: Se i parametri forniti non sono validi o sufficienti, il sistema restituisce un errore esplicativo
-3. **Errore di esecuzione**: Se l'operazione fallisce durante l'esecuzione, il sistema cattura l'errore e fornisce informazioni sul fallimento
+1. **Parametri invalidi**: Se i parametri forniti non sono validi o sufficienti, il sistema richiede all'utente i dati corretti
+2. **Errore di esecuzione**: Se l'operazione fallisce durante l'esecuzione, il sistema cattura l'errore e fornisce informazioni sul fallimento
 
 ## Caso d'uso: AperturaTicketSupporto
 **Id:** 6
-**Breve descrizione:** L'AI o l'utente richiedono assistenza umana, creando un ticket di supporto che viene inoltrato agli amministratori.
+**Breve descrizione:** L'AI richiede assistenza umana, creando un ticket di supporto che viene inoltrato agli amministratori.
 **Attori primari:** Utente, Sistema AI
 **Attori secondari:** Amministratore
 
@@ -192,14 +180,13 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 - L'utente non ha già un ticket di supporto aperto
 
 **Flusso Principale**:
-1. L'utente richiede supporto umano o l'AI identifica una richiesta che non può gestire autonomamente
+1. L'AI identifica una richiesta che non può gestire autonomamente
 2. Il sistema crea un nuovo ticket di supporto associato all'utente
 3. Il sistema recupera le informazioni dell'utente (nome, ID) per il ticket
 4. Il sistema compone un messaggio di ticket con le informazioni dell'utente e la richiesta originale
 5. Il sistema aggiorna lo stato del messaggio associato come ticket
-6. Il sistema inoltra il ticket agli amministratori tramite Telegram
-7. Il sistema genera pulsanti inline per le azioni amministrative (risposta, chiusura ticket)
-8. Il sistema notifica l'utente che la sua richiesta è stata inoltrata a un operatore umano
+6. Il sistema inoltra il ticket agli amministratori tramite Telegram e la piattaforma web
+7. Il sistema notifica l'utente che la sua richiesta è stata inoltrata a un operatore umano
 
 **Postcondizioni**:
 - Un ticket di supporto è stato creato nel database
@@ -207,8 +194,7 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 - Lo stato dell'utente è stato aggiornato per indicare un ticket aperto
 
 **Sequenza degli eventi alternativa**:
-1. **Ticket già esistente**: Se l'utente ha già un ticket aperto, il sistema aggiunge il nuovo messaggio al ticket esistente
-2. **Errore di notifica**: Se la notifica agli amministratori fallisce, il sistema riprova o registra l'errore
+1. **Errore di notifica**: Se la notifica agli amministratori fallisce, il sistema riprova o registra l'errore
 
 ## Caso d'uso: RispostaAmministratoreATicket
 **Id:** 7
@@ -226,13 +212,15 @@ Il diagramma dettagliato di questo caso d'uso è disponibile nel file `doc/diagr
 3. Il sistema verifica la validità della richiesta e l'esistenza dell'utente
 4. Il sistema recupera il ticket più recente associato all'utente
 5. Il sistema salva la risposta dell'amministratore nel database, associandola al ticket
-6. Il sistema inoltra la risposta all'utente tramite Telegram
-7. Il sistema aggiorna lo stato di risposta, indicando che l'amministratore ha risposto
-8. Il sistema notifica il pannello amministrativo dell'aggiornamento
+6. Il sistema inoltra la risposta all'utente
+7. L'amministratore può decidere di:
+    7.1 ripetere l'operazione e mandare un nuovo messaggio
+    7.2 attendere una risposta
+    7.3 extension (**ChiusuraTicketSupporto**)
 
 **Postcondizioni**:
 - La risposta dell'amministratore è registrata nel database
-- L'utente ha ricevuto la risposta tramite Telegram
+- L'utente ha ricevuto la risposta
 - Lo stato del ticket è aggiornato
 
 **Sequenza degli eventi alternativa**:

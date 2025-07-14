@@ -1,6 +1,6 @@
 # Capitolo 11: Sistema di Ticketing
 
-Il sistema di ticketing rappresenta una componente cruciale dell'architettura complessiva, fungendo da ponte tra l'automazione fornita dall'AI e l'intervento umano necessario per problematiche complesse. Questo capitolo analizza in dettaglio il sistema implementato, la sua integrazione con gli altri componenti e i meccanismi che permettono una collaborazione efficace tra assistenti AI e operatori umani.
+Il sistema di ticketing costituisce un elemento necessario nell'architettura del chatbot, operando come meccanismo di transizione intelligente tra la risposta automatizzata dell'AI e l'intervento specialistico degli operatori umani. Questo capitolo esplora in profondità l'implementazione del sistema, illustrando come realizzi la continuità dell'assistenza quando le richieste superano le capacità dell'automazione, garantendo che ogni problema trovi la giusta modalità di risoluzione.
 
 ## 11.1 Rilevamento Automatico di Problemi Complessi
 

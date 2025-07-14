@@ -1,36 +1,42 @@
 @startuml Conversation Sequence Diagram
 
+' Double the font size with skinparam settings
+skinparam defaultFontSize 28
+skinparam actorFontSize 32
+skinparam participantFontSize 28
+skinparam arrowFontSize 26
+skinparam noteFontSize 24
+skinparam sequenceGroupFontSize 28
+skinparam sequenceDividerFontSize 28
+skinparam sequenceReferenceFontSize 28
+
 actor User
-participant "Telegram Bot" as TgBot
-participant "Message Handler" as Handler
-participant "User Repository" as UserRepo
-participant "Message Repository" as MsgRepo
+participant "Web Server" as WebSrv
+participant "User Repo" as UserRepo
+participant "Msg Repo" as MsgRepo
 participant "OpenAI Handler" as OpenAI
 participant "OpenAI API" as API
 participant "Function Manager" as Functions
 participant "Konsolex API" as Konsolex
 
-User -> TgBot: Send message
-activate TgBot
+User -> WebSrv: Send message
+activate WebSrv
 
-TgBot -> Handler: Process message
-activate Handler
-
-Handler -> UserRepo: getUserOrCreate()
+WebSrv -> UserRepo: getUserOrCreate()
 activate UserRepo
 UserRepo -> OpenAI: Create thread if new user
 OpenAI -> API: Create thread
 API --> OpenAI: Thread ID
 OpenAI --> UserRepo: Thread created
-UserRepo --> Handler: User object
+UserRepo --> WebSrv: User object
 deactivate UserRepo
 
-Handler -> MsgRepo: createUserMessage()
+WebSrv -> MsgRepo: createUserMessage()
 activate MsgRepo
-MsgRepo --> Handler: Message stored
+MsgRepo --> WebSrv: Message stored
 deactivate MsgRepo
 
-Handler -> OpenAI: createReply()
+WebSrv -> OpenAI: createReply()
 activate OpenAI
 
 OpenAI -> API: Add message to thread
@@ -65,19 +71,16 @@ loop Until run completes
 end
 
 API --> OpenAI: Final response
-OpenAI --> Handler: Formatted reply
+OpenAI --> WebSrv: Formatted reply
 deactivate OpenAI
 
-Handler -> MsgRepo: createGptMessage()
+WebSrv -> MsgRepo: createGptMessage()
 activate MsgRepo
-MsgRepo --> Handler: AI message stored
+MsgRepo --> WebSrv: AI message stored
 deactivate MsgRepo
 
-Handler -> Konsolex: Notify message update
-Handler --> TgBot: Response ready
-deactivate Handler
-
-TgBot --> User: Display response
-deactivate TgBot
+WebSrv -> Konsolex: Notify message update
+WebSrv --> User: Display response
+deactivate WebSrv
 
 @enduml

@@ -1,0 +1,93 @@
+@startuml basic-interaction-use-case
+
+!theme plain
+title InterazioneBaseUtenteChatBot - Caso d'uso Principale
+
+' Definizione degli attori a sinistra
+left to right direction
+
+actor "Utente" as User
+actor "Sistema AI" as AI
+
+' Definizione del sistema
+rectangle "Sistema Chatbot" {
+    ' Use case principale (al centro)
+    usecase "Invia Messaggio\ne Ricevi Risposta" as UC1
+    
+    ' Use case inclusi (in alto)
+    usecase "Crea Nuovo Utente" as UC2
+    usecase "Generazione Risposta AI" as UC3
+    
+    ' Use case di estensione (a destra)
+    usecase "Esecuzione Funzioni\nSpecializzate" as UC4
+    usecase "Escalation a\nSupporto Umano" as UC5
+    
+    ' Use case alternativi (in basso)
+    usecase "Gestione Ticket Aperto" as UC6
+    usecase "Gestione Errori" as UC7
+    
+    ' Layout positioning
+    UC2 -[hidden]- UC3
+    UC1 -[hidden]- UC6
+    UC1 -[hidden]- UC7
+    UC4 -[hidden]- UC5
+    UC6 -[hidden]- UC7
+}
+
+' Relazioni principali
+User --> UC1 : "Invia messaggio di testo"
+AI --> UC3 : "Genera risposta"
+
+' Include relationships
+UC1 .> UC2 : <<include>>\n(se utente non registrato)
+UC1 .> UC3 : <<include>>
+
+' Extend relationships
+UC4 .> UC1 : <<extend>>\n(tool calls necessari)
+UC5 .> UC1 : <<extend>>\n(richiesta non risolvibile)
+
+' Alternative flows
+UC6 .> UC1 : <<extend>>\n(ticket aperto)
+UC7 .> UC1 : <<extend>>\n(errore elaborazione)
+
+' Note per le precondizioni
+note top of UC1
+  **Precondizioni:**
+  - Utente registrato con credenziali valide
+  
+  **Postcondizioni:**
+  - Messaggio utente salvato nel DB
+  - Risposta AI salvata nel DB
+  - Utente riceve risposta generata
+end note
+
+' Note per il flusso principale
+note right of UC1
+  **Flusso Principale:**
+  1. Utente invia messaggio
+  2. Sistema riceve messaggio
+  3. Verifica parametri
+  4. Recupera record utente
+  5. Salva messaggio nel DB
+  6. Aggiorna stato messaggi
+  7. Genera risposta AI
+  8. Salva risposta nel DB
+  9. Invia risposta all'utente
+end note
+
+' Note per scenari alternativi
+note bottom of UC6
+  **Ticket Aperto:**
+  Il messaggio viene inoltrato
+  all'amministratore invece che all'AI
+end note
+
+note bottom of UC7
+  **Gestione Errori:**
+  - Parametri non validi
+  - Errore di elaborazione
+  Sistema registra errore e
+  restituisce dettagli
+end note
+
+@enduml
